@@ -9,7 +9,15 @@ ejml="ejml-0.23.jar";
 class="edu.stanford.nlp.pipeline.StanfordCoreNLP";
 options="tokenize,ssplit,pos,lemma,ner,parse"; #"dcoref";
 
-read -p "Input : " input;
+input=$1;
 
-java -Xmx2g -cp .:$core:$models:$xom:$joda:$jollyday:$ejml $class -annotators $options -file $input;
-XMLTreeEdit $input.xml & 
+IFS='.' read -a myarray <<< "$input"
+lemma="${myarray[0]}""_lemma.txt";
+parse="${myarray[0]}""_parse.txt";
+dep="${myarray[0]}""_dep.txt";
+
+java -Xmx6g -cp .:$core:$models:$xom:$joda:$jollyday:$ejml $class -annotators $options -file $input;
+xmlstarlet tr lemma.xsl $input.xml > $lemma;
+xmlstarlet tr parse.xsl $input.xml > $parse;
+xmlstarlet tr dep.xsl $input.xml > $dep;
+rm $input.xml;
