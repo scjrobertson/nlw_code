@@ -10,6 +10,8 @@
 			<xsl:for-each select="tokens/token">
 				<xsl:value-of select="@id"/>
 				<xsl:value-of select="'&#160;'"/>
+				<xsl:value-of select="word"/>
+				<xsl:value-of select="'&#160;'"/>
 				<xsl:value-of select="lemma"/>
 				<xsl:value-of select="'&#160;'"/>
 				<xsl:value-of select="POS"/>

@@ -15,9 +15,10 @@ IFS='.' read -a myarray <<< "$input"
 lemma="${myarray[0]}""_lemma.txt";
 parse="${myarray[0]}""_parse.txt";
 dep="${myarray[0]}""_dep.txt";
+xml="${myarray[0]}"".xml";
 
 java -Xmx6g -cp .:$core:$models:$xom:$joda:$jollyday:$ejml $class -annotators $options -file $input;
 xmlstarlet tr lemma.xsl $input.xml > $lemma;
 xmlstarlet tr parse.xsl $input.xml > $parse;
 xmlstarlet tr dep.xsl $input.xml > $dep;
-rm $input.xml;
+mv $input.xml $xml;
