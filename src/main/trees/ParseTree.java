@@ -10,7 +10,7 @@ package src.main.trees;
 import src.main.utils.StdIn;
 import java.util.ArrayList;
 import java.util.HashSet;
-
+import java.util.Stack;
 
 /**
  * This object reads in a Stanford syntactic parse tree s-expression and recreates the it.
@@ -44,8 +44,8 @@ public class ParseTree {
 		 *
 		 * @param tag The Penn Treebank II Tags which describes
 		 * 	      the word or phrase
-		 * @param word If the tag is word level then the word
-		 * 		string is not null.
+		 * @param word The sentence level appearing in the word. If 
+		 * 		the tag is phrase level the word is null.
 		*/
 		public Node(String tag, String word) {
 			this.tag = tag; this.word = word;
@@ -58,9 +58,7 @@ public class ParseTree {
 	 *
 	 * @param sExp The s-expression describing the parse tree.
 	 */
-	private ParseTree (String sExp) {
-		growTree(sExp);
-	}
+	private ParseTree (String sExp) { growTree(sExp); }
 
 	/**
 	 * Preferable method of instantiation. Used to initialise the ParseTree object.
@@ -88,10 +86,9 @@ public class ParseTree {
 		for(int i = 0; i < tokens.length; i++) {
 			if (tokens[i].equals(")")) {
 				this.root = sapling.remove(--N);
-				if (N == 0) break;
+				if (sapling.isEmpty()) break;
 				sapling.get(N-1).children.add(this.root);
-			}
-			else if (!tokens[i].equals("(")) {
+			} else if (!tokens[i].equals("(")) {
 				if (this.set.contains(tokens[i])) sapling.add(new Node(tokens[i], tokens[++i]));
 				else sapling.add(new Node(tokens[i], null));
 				N++;
@@ -123,7 +120,7 @@ public class ParseTree {
 	private int preOrder (Node node, int j) {
 		if (node == null) return j;
 		node.N = j++;
-		for (int i = 0; i < node.children.size(); i++) j = preOrder(node.children.get(i), j);
+		for (Node n : node.children) j = preOrder(n, j);
 		return j;
 	}
 
@@ -151,7 +148,7 @@ public class ParseTree {
 	 */
 	private int postOrder (Node node, int j) {
 		if (node == null) return j;
-		for (int i = 0; i < node.children.size(); i++) j = postOrder(node.children.get(i), j);
+		for (Node n : node.children) j = postOrder(n, j);
 		node.N = j++;
 		return j;
 	}
@@ -189,7 +186,7 @@ public class ParseTree {
 			if (this.set.contains(word)) sb.deleteCharAt(sb.length()-1);
 			sb.append(word + " ");
 		}
-		for (int i = 0; i < node.children.size(); i++) sb = getSentence(node.children.get(i), sb);
+		for (Node n : node.children) sb = getSentence(n, sb);
 		return sb;
 	}
 
@@ -231,7 +228,7 @@ public class ParseTree {
 		j++;
 		if (node.word == null) sb.append(node.tag + "\n");
 		else sb.append(node.tag + " => " + node.word + "\n");
-		for (int i = 0; i < node.children.size(); i++) sb = sketchTree(node.children.get(i), sb, j);
+		for (Node n : node.children) sb = sketchTree(n, sb, j);
 		return sb;
 	}
 
