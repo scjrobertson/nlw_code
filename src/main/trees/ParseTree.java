@@ -3,7 +3,7 @@
  *  Execution:    java src.main.trees.ParseTree
  *  Dependencies: none
  *
- *  Reads in data of various types from standard input.
+ *  Recreates a parse tree from a Stanford s-expression.
  *
  *************************************************************************/
 package src.main.trees;
