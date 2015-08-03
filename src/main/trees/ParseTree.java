@@ -1,35 +1,86 @@
+/*************************************************************************
+ *  Compilation:  javac src/main/trees/ParseTree.java
+ *  Execution:    java src.main.trees.ParseTree
+ *  Dependencies: none
+ *
+ *  Reads in data of various types from standard input.
+ *
+ *************************************************************************/
 package src.main.trees;
-
 import src.main.utils.StdIn;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+
+/**
+ * This object reads in a Stanford syntactic parse tree s-expression and recreates the it.
+ * Functionality is limited to basic traversals and binary string generations. Parse trees 
+ * are difficult to modify as they do not embody the dependency relationships between words 
+ * and subtrees cannot be added to perform transformations. This is merely a basic example of
+ * tree creation. This is not a binary tree as it is also capable of handling punctuation 
+ * which add to phrase Tags and destroy the binary decomposition of the sentence.
+ *
+ *@author SCJ Robertson, 16579852
+ *@since 01/08/15
+ */
 public class ParseTree {
 
 	private Node root;
 	private HashSet<String> set = POSTags.getTags(); 
 	private String sentence;
 
+	/**
+	 * This nested class describes the node of a tree. Each node can have an arbitrary
+	 * number of children. The class is private to hide the implementation of the tree
+	 * from the client.
+	*/
 	private class Node {
 		private String tag;
 		private String word;
 		private ArrayList<Node> children = new ArrayList<Node> ();
 		private int N;
 
+		/* Instantiates the Node object.
+		 *
+		 * @param tag The Penn Treebank II Tags which describes
+		 * 	      the word or phrase
+		 * @param word If the tag is word level then the word
+		 * 		string is not null.
+		*/
 		public Node(String tag, String word) {
 			this.tag = tag; this.word = word;
 		}
 	}
-
+	
+	/**
+	 * Private constructor for ParseTree rather use 
+	 * static factory method {@link getInstance()}.
+	 *
+	 * @param sExp The s-expression describing the parse tree.
+	 */
 	private ParseTree (String sExp) {
-		parseSExp(sExp);
+		growTree(sExp);
 	}
 
+	/**
+	 * Preferable method of instantiation. Used to initialise the ParseTree object.
+	 *
+	 * @param sExp The s-expression describing the parse tree.
+	 * @return A ParseTree object.
+	 */
 	public static ParseTree getInstance(String sExp) {
 		return new ParseTree(sExp);
 	}
 
-	private void parseSExp(String sExp) {
+	/**
+	 * This method parses the s-expression reconstructing the parse tree. This is 
+	 * a simplified version of Dijkstra's two stack algorithm. 
+	 *
+	 *<p> Complexity: O(N), where N is the number of tokens in the s-expression.
+	 *
+	 * @param sExp The s-expression describing the parse tree.
+	 */
+	private void growTree(String sExp) {
 		ArrayList<Node> sapling = new ArrayList<Node>();
 		String[] tokens = sExp.split("\\s+");
 		int N = 0;
@@ -48,18 +99,56 @@ public class ParseTree {
 		}
 	}
 
+	/** 
+	 * This function performs a pre-order traversal of the tree assigning each node
+	 * a consecutive number based on order of inspection. This function is recursively 
+	 * called by each node in the tree.
+	 *
+	 * <p> Complexity: O(N), where N is the number of nodes in the tree.
+	 */
 	public void preOrder () { preOrder(this.root, 0); }
 
+
+	/** 
+	 * This function performs a pre-order traversal of the tree assigning each node
+	 * a consecutive number based on order of inspection. This function is recursively 
+	 * called by each node in the tree.
+	 *
+	 * <p> Complexity: O(N), where N is the number of nodes in the tree.
+	 *
+	 * @param node The current node during traversal.
+	 * @param j The number assigned to the previous node.
+	 * @return The current node number, based onorder of inspection.
+	 */
 	private int preOrder (Node node, int j) {
 		if (node == null) return j;
 		node.N = j++;
-		if (node.word != null) System.out.println(node.word);
 		for (int i = 0; i < node.children.size(); i++) j = preOrder(node.children.get(i), j);
 		return j;
 	}
 
+
+	/** 
+	 * This function performs a post-order traversal of the tree assigning each node
+	 * a consecutive number based on order of inspection. This function is recursively 
+	 * called by each node in the tree.
+	 *
+	 * Complexity: O(N), where N is the number of nodes in the tree.
+	 */
 	public void postOrder () { postOrder(this.root, 0); }
 
+
+	/** 
+	 * This function performs a post-order traversal of the tree assigning each node
+	 * a consecutive number based on order of inspection. This function is recursively 
+	 * called by each node in the tree.
+	 *
+	 * <p> Complexity: O(N), where N is the number of nodes in the tree.
+	 *
+	 * @param node The current node during traversal.
+	 * @param j The number assigned to the previous node.
+	 * @return The current node number based on order of inspection.
+	 */
 	private int postOrder (Node node, int j) {
 		if (node == null) return j;
 		for (int i = 0; i < node.children.size(); i++) j = postOrder(node.children.get(i), j);
@@ -67,12 +156,31 @@ public class ParseTree {
 		return j;
 	}
 
+	/** 
+	 * Recreate the original sentence described by the tree. This function is recursively 
+	 * called by each node in the tree.
+	 *
+	 * <p> Complexity: O(N), where N is the number of nodes in the tree.
+	 * 
+	 * @return The sentence desribed by the parse tree.
+	 */
 	public String getSentence () {
-		if (sentence == null) sentence = buildSentence(this.root, new StringBuilder()).toString();
+		if (sentence == null) sentence = getSentence(this.root, new StringBuilder()).toString();
 		return sentence;
 	}
 
-	public StringBuilder buildSentence (Node node, StringBuilder sb) {
+	/** 
+	 * Recreate the original sentence described by the tree. This function is recursively 
+	 * called by each node in the tree.
+	 *
+	 * <p> Complexity: O(N), where N is the number of nodes in the tree.
+	 *
+	 * @param node The current node during traversal.
+	 * @param sb The sentence under construction. Stringbuilder passed by reference to
+	 * 		avoid memory overhed of immutable string class.
+	 * @return The current sentence fragment under construction.
+	 */
+	private StringBuilder getSentence (Node node, StringBuilder sb) {
 		if (node == null) return sb;
 		if (node.word != null) {
 			String word = node.word;
@@ -81,15 +189,43 @@ public class ParseTree {
 			if (this.set.contains(word)) sb.deleteCharAt(sb.length()-1);
 			sb.append(word + " ");
 		}
-		for (int i = 0; i < node.children.size(); i++) sb = buildSentence(node.children.get(i), sb);
+		for (int i = 0; i < node.children.size(); i++) sb = getSentence(node.children.get(i), sb);
 		return sb;
 	}
 
+
+	/**
+	 * Create an easily readable representation of the tree. This function is recursively 
+	 * called by each node in the tree. This a relatively expensive operation,
+	 * don't call lightly.
+	 *
+	 * <p> Complexity: O(NlgN), where N is the number of nodes in the tree. 
+	 * Lazy implementation, there are probably methods to reduce to linear 
+	 * order of complexity.
+	 *
+	 * @return The text representation of the parse tree.
+	 */
 	@Override public String toString() {
 		return sketchTree(this.root, new StringBuilder(), 0).toString();
 	}
 
-	public StringBuilder sketchTree (Node node, StringBuilder sb, int j) {
+
+	/**
+	 * Create an easily readable representation of the tree. This function is recursively 
+	 * called by each node in the tree. This a relatively expensive operation,
+	 * don't call lightly.
+	 *
+	 * <p> Complexity: O(NlgN), where N is the number of nodes in the tree. 
+	 * Lazy implementation, there are probably methods to reduce to linear 
+	 * order of complexity.
+	 *
+	 * @param node The current node during traversal.
+	 * @param sb The sentence under construction. Stringbuilder passed by reference to
+	 * 		avoid memory overhed of immutable string class.
+	 * @param j The depth of the node. Used for spacing.
+	 * @return The parse tree string under construction
+	 */
+	private StringBuilder sketchTree (Node node, StringBuilder sb, int j) {
 		if (node == null) return sb;
 		for (int i = 0; i < j; i++) sb.append("  ");
 		j++;
@@ -99,12 +235,18 @@ public class ParseTree {
 		return sb;
 	}
 
+	/**
+	 * A small example of the output. 
+	 *
+	 * @param args Standard input.
+	 */
 	public static void main(String[] args) {
-		String sexp = StdIn.readAllLines()[0].trim();
+		String sexp = "(ROOT (S (NP (DT The) (NN girl))"
+			+"(VP (VBD chased) (NP (DT the) (NN rabbit)))))" ;
 		sexp = sexp.replace("(", " ( ").replace(")", " ) ");
-		System.out.println(sexp);
 		ParseTree tree = ParseTree.getInstance(sexp);
 		System.out.println(tree.toString());
+		System.out.println(tree.getSentence());
 	}
 
 }
