@@ -4,16 +4,15 @@
  *  Dependencies: none
  *
  *  Recreates a parse tree from a Stanford s-expression.
- *
  *************************************************************************/
 package src.main.trees;
-import src.main.utils.StdIn;
+import src.main.utils.POSTags;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Stack;
 
 /**
- * This object reads in a Stanford syntactic parse tree s-expression and recreates the it.
+ * This object is given a Stanford syntactic parse tree s-expression and recreates the it.
  * Functionality is limited to basic traversals and binary string generations. Parse trees 
  * are difficult to modify as they do not embody the dependency relationships between words 
  * and subtrees cannot be added to perform transformations. This is merely a basic example of
@@ -35,8 +34,7 @@ public class ParseTree {
 	 * from the client.
 	*/
 	private class Node {
-		private String tag;
-		private String word;
+		private String tag, word;
 		private ArrayList<Node> children = new ArrayList<Node> ();
 		private int N;
 

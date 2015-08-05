@@ -10,11 +10,7 @@
 			<xsl:for-each select="dependencies[1]/dep">
 				<xsl:value-of select="governor/@idx"/>
 				<xsl:value-of select="'&#160;'"/>
-				<xsl:value-of select="governor"/>
-				<xsl:value-of select="'&#160;'"/>
 				<xsl:value-of select="dependent/@idx"/>
-				<xsl:value-of select="'&#160;'"/>
-				<xsl:value-of select="dependent"/>
 				<xsl:value-of select="'&#160;'"/>
 				<xsl:value-of select="@type"/>
 				<xsl:value-of select="'&#160;'"/>
