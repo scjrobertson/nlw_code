@@ -9,6 +9,8 @@
 package src.main.trees;
 import src.main.utils.StdIn;
 import java.util.ArrayList;
+import java.math.BigInteger;
+import java.util.Random;
 
 /**
  * This object is given both a simplified POS and dependency expressions and recreates
@@ -22,6 +24,7 @@ import java.util.ArrayList;
 public class DependencyTree {
 
 	private Node root;
+	private final int M;
 
 	/**
 	 * This nested class describes the node of a tree. Each node can have an arbitrary
@@ -54,18 +57,23 @@ public class DependencyTree {
 	 *
 	 * @param dep The simplified Stanford dependencies for the sentence.
 	 * @param words The POS tags and lemmas of the sentence.
+	 * @param M The setentence index.
 	 */
-	private DependencyTree(String dep, String words) { growTree(dep, plantTree(words)); }
+	private DependencyTree(String dep, String words, int M) { 
+		this.M = M;
+		growTree(dep, plantTree(words)); 
+	}
 
 	/**
 	 * Preferable method of instantiation. Used to initialise the DependencyTree object.
 	 *
 	 * @param dep The simplified Stanford dependencies for the sentence.
 	 * @param words The POS tags and lemmas of the sentence.
+	 * @param M The sentence index.
 	 * @return A DependencyTree object.
 	 */
-	public static DependencyTree getInstance(String dep, String lemma) {
-		return new DependencyTree(dep, lemma);
+	public static DependencyTree getInstance(String dep, String lemma, int M) {
+		return new DependencyTree(dep, lemma, M);
 	}
 
 
@@ -85,7 +93,7 @@ public class DependencyTree {
 		seed[0] = new Node(null, null, "ROOT");
 
 		for (int i = 0; i < words.length; i++) {
-			tk = words[i].split("\\s+");
+			tk = words[i].split("\u00A0");
 			seed[i+1] = new Node(tk[1], tk[2], tk[3]);
 		}
 		return seed;
@@ -105,7 +113,7 @@ public class DependencyTree {
 		int i,j;
 		
 		for (int k = 0; k < dp.length; k++) {
-			tk = dp[k].split("\\s+");
+			tk = dp[k].split("\u00A0");
 			i = Integer.parseInt(tk[0]);
 			j = Integer.parseInt(tk[1]);
 			node[i].dependents.add(node[j]);
@@ -142,20 +150,6 @@ public class DependencyTree {
 		return j;
 	}
 
-	/**
-	 * Create an easily readable representation of the tree. This function is recursively 
-	 * called by each node in the tree. This a relatively expensive operation,
-	 * don't call lightly.
-	 *
-	 * <p> Complexity: O(NlgN), where N is the number of nodes in the tree. 
-	 * Lazy implementation, there are probably methods to reduce to linear 
-	 * order of complexity.
-	 *
-	 * @return The text representation of the parse tree.
-	 */	
-	@Override public String toString() {
-		return sketchTree(this.root, new StringBuilder(), 0).toString();
-	}
 
 	/** 
 	 * This function performs a post-order traversal of the tree assigning each node
@@ -185,6 +179,23 @@ public class DependencyTree {
 		return j;
 	}
 
+
+
+	/**
+	 * Create an easily readable representation of the tree. This function is recursively 
+	 * called by each node in the tree. This a relatively expensive operation,
+	 * don't call lightly.
+	 *
+	 * <p> Complexity: O(NlgN), where N is the number of nodes in the tree. 
+	 * Lazy implementation, there are probably methods to reduce to linear 
+	 * order of complexity.
+	 *
+	 * @return The text representation of the parse tree.
+	 */	
+	@Override public String toString() {
+		return sketchTree(this.root, new StringBuilder(), 0).toString();
+	}
+
 	/**
 	 * Create an easily readable representation of the tree. This function is recursively 
 	 * called by each node in the tree. This a relatively expensive operation,
@@ -202,7 +213,7 @@ public class DependencyTree {
 	 */
 	private StringBuilder sketchTree(Node node, StringBuilder sb, int j) {
 		if(node == null) return sb;
-		for(int i = 0; i < j; i++) sb.append("\t");
+		for(int i = 0; i < j; i++) sb.append("    ");
 		j++;
 		if (node.word == null) sb.append(node.tag + "\n");
 		else sb.append(node.gov_rel + " => " + node.word + "\n");
@@ -226,7 +237,10 @@ public class DependencyTree {
 				+ "3 chased chase VBD\n"
 				+ "4 the the DT\n"
 				+ "5 rabbit rabbit NN";
-		DependencyTree tree = DependencyTree.getInstance(dep, lemma);
+		DependencyTree tree = DependencyTree.getInstance(dep, lemma, 0);
 		System.out.println(tree.toString());
+		BigInteger p = BigInteger.probablePrime(64, new Random());
+		System.out.println(p);
+		System.out.println(p.hashCode());
 	}
 }

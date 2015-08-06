@@ -27,6 +27,7 @@ public class ParseTree {
 	private Node root;
 	private HashSet<String> set = POSTags.getTags(); 
 	private String sentence;
+	private int M;
 
 	/**
 	 * This nested class describes the node of a tree. Each node can have an arbitrary
@@ -55,17 +56,22 @@ public class ParseTree {
 	 * static factory method {@link getInstance()}.
 	 *
 	 * @param sExp The s-expression describing the parse tree.
+	 * @param M The sentence sequence index.
 	 */
-	private ParseTree (String sExp) { growTree(sExp); }
+	private ParseTree (String sExp, int M) { 
+		this.M = M;
+		growTree(sExp); 
+	}
 
 	/**
 	 * Preferable method of instantiation. Used to initialise the ParseTree object.
 	 *
 	 * @param sExp The s-expression describing the parse tree.
+	 * @param M The sentence sequence index.
 	 * @return A ParseTree object.
 	 */
-	public static ParseTree getInstance(String sExp) {
-		return new ParseTree(sExp);
+	public static ParseTree getInstance(String sExp, int M) {
+		return new ParseTree(sExp, M);
 	}
 
 	/**
@@ -236,10 +242,9 @@ public class ParseTree {
 	 * @param args Standard input.
 	 */
 	public static void main(String[] args) {
-		String sexp = "(ROOT (S (NP (DT The) (NN girl))"
-			+"(VP (VBD chased) (NP (DT the) (NN rabbit)))))" ;
-		sexp = sexp.replace("(", " ( ").replace(")", " ) ");
-		ParseTree tree = ParseTree.getInstance(sexp);
+		String sexp = "( ROOT ( S ( NP ( DT The ) ( NN girl ) )"
+			+"( VP ( VBD chased ) ( NP ( DT the ) ( NN rabbit ) ) ) ) )" ;
+		ParseTree tree = ParseTree.getInstance(sexp, 0);
 		System.out.println(tree.toString());
 		System.out.println(tree.getSentence());
 	}
