@@ -1,0 +1,10 @@
+#Java files
+*.class
+*.jar
+*.zip
+*.txt
+*.xml
+*.swp
+*.java~
+*.txt~
+*.java~

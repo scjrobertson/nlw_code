@@ -25,6 +25,7 @@ public class DependencyTree {
 
 	private Node root;
 	private final int M;
+	private BigInteger p, h;
 
 	/**
 	 * This nested class describes the node of a tree. Each node can have an arbitrary
@@ -64,6 +65,24 @@ public class DependencyTree {
 		growTree(dep, plantTree(words)); 
 	}
 
+
+	/**
+	 * Private constructor for ParseTree rather use 
+	 * static factory method {@link getInstance()}.
+	 *
+	 * @param dep The simplified Stanford dependencies for the sentence.
+	 * @param words The POS tags and lemmas of the sentence.
+	 * @param p BigInteger representation of a 20 digit prime.
+	 * @param h the truncated hash of p
+	 * @param M The setentence index.
+	 */
+	private DependencyTree(String dep, String words, BigInteger p, BigInteger h, int M) { 
+		this.M = M;
+		this.p = p;
+		this.h = h;
+		growTree(dep, plantTree(words)); 
+	}
+
 	/**
 	 * Preferable method of instantiation. Used to initialise the DependencyTree object.
 	 *
@@ -76,6 +95,20 @@ public class DependencyTree {
 		return new DependencyTree(dep, lemma, M);
 	}
 
+
+	/**
+	 * Preferable method of instantiation. Used to initialise the DependencyTree object.
+	 *
+	 * @param dep The simplified Stanford dependencies for the sentence.
+	 * @param words The POS tags and lemmas of the sentence.
+	 * @param p BigInteger representation of a 20 digit prime.
+	 * @param h The truncated hash of p.
+	 * @param M The sentence index.
+	 * @return A DependencyTree object.
+	 */
+	public static DependencyTree getInstance(String dep, String lemma, BigInteger p, BigInteger h, int M) {
+		return new DependencyTree(dep, lemma, p, h, M);
+	}
 
 	/**
 	 * Creates an array of nodes which will be used to form the 
@@ -148,6 +181,38 @@ public class DependencyTree {
 		node.N = j++;
 		for (Node n : node.dependents) j = preOrder(n, j);
 		return j;
+	}
+
+
+	/** 
+	 * Generate the binary string of the parse tree as described by Atallah et. al (2001).
+	 *
+	 * <p> Complexity: O(N), where N is the number of node is the tree.
+	 *
+	 *@return The binary string.
+	 */
+	public String getBinaryString () {
+		preOrder();
+		return getBinaryString(this.root, new StringBuilder()).toString();
+	}
+
+	/**
+	 * Generate the binary string of the parse tree.This function is called recursively
+	 * by every node in the tree.This is a post-order travesal of the tree assigning 
+	 * each node a bit based on whether it is a quadratic residue or not.
+	 *
+	 * <p> Complexity: O(N), where N is the number of nodes in the tree.
+	 *
+	 * @param node The current node during traversal
+	 * @param sb StringBuilder constructing the binary string.
+	 * @return A StringBuilder of the binaryString.
+	 */
+	private StringBuilder getBinaryString (Node node, StringBuilder sb) {
+		if (node == null) return sb;
+		for (Node n : node.dependents) sb = getBinaryString(n, sb);
+		if (ReadFile.isQuadraticResidue(node.N, this.h, this.p)) sb.append("1");
+		else sb.append("0");
+		return sb;
 	}
 
 

@@ -57,7 +57,7 @@ public class ReadFile {
 	 * @param h The hash of the prime p
 	 * @return An array of ParseTree objects.
 	 */
-	public static ParseTree[] processParse (String parse, BigInteger p, long h) {
+	public static ParseTree[] processParse (String parse, BigInteger p, BigInteger h) {
 		String[] sexp = fileToString(parse).split("\n\n");
 		ParseTree[] forest = new ParseTree[sexp.length];
 		for (int i = 0; i < sexp.length; i++) {
@@ -129,32 +129,29 @@ public class ReadFile {
 	 * @param p A BigInteger representation of a 20 digit prime
 	 * @return Whether x is a quadratic residue of q modulo p.
 	 */
-	public static boolean isQuadraticResidue (int x, long q, BigInteger p) {
-		BigInteger qb = new BigInteger(q + "");
-		BigInteger xb = new BigInteger(x*x + "");
-		//BigInteger xmod = xb.mod(p);
-		//BigInteger qmod = qb.mod(p);
-		//System.out.println(x + "\t" + xmod + "\t" + qmod);
-		if (xb.mod(p).equals(qb.mod(p))) return true;
+	public static boolean isQuadraticResidue (int x, BigInteger q, BigInteger p) {
+		BigInteger xb = new BigInteger(x*(x-1) + "");
+		BigInteger mod = xb.subtract(q).mod(p);
+		if (mod.equals(BigInteger.ZERO)) return true;
 		return false;
 	}
 
 	/**
 	 * Run as main of package.Flags -p : parse s-expression file
 	 * 				-d: parse dependency and pos files 
-	 * 				    (requires two input file)
+	 * 				    (requires two input files)
 	 * @param args Standard input - flags and file names.
 	 */
 	public static void main (String [] args) {
-		BigInteger p = BigInteger.probablePrime(4, new Random());
+		BigInteger p = BigInteger.probablePrime(64, new Random());
 		MessageDigest md = getHashAlgorithm("SHA-1");
-		BigInteger h = getHash(md, p.toString(), 4);
+		BigInteger h = getHash(md, p.toString(), 8);
 		System.out.println(p + "\t" + h);
 
 		ParseTree[] forest = null;
 		if (args.length > 0) {
 			if (args[0].equals("-p")) 
-				forest = processParse(args[1], p, h.longValue() );
+				forest = processParse(args[1], p, h);
 			//else if (args[0].equals("-d")) 
 				//forest = processDependency(args[1], args[2], p, h.longValue());
 			for (int i = 0; i < forest.length; i++)

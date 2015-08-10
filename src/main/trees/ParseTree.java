@@ -30,8 +30,7 @@ public class ParseTree {
 	private Node root;
 	private HashSet<String> set = POSTags.getTags(); 
 	private String sentence, binaryString;
-	private BigInteger p;
-	private long h;
+	private BigInteger p, h;
 	private int M;
 
 	/**
@@ -75,7 +74,7 @@ public class ParseTree {
 	 * @param h The truncated hash of p.
 	 * @param M The sentence sequence index.
 	 */
-	private ParseTree (String sExp, BigInteger p, long h, int M) { 
+	private ParseTree (String sExp, BigInteger p, BigInteger h, int M) { 
 		this.p = p;
 		this.h = h;
 		this.M = M;
@@ -101,7 +100,7 @@ public class ParseTree {
 	 * @param M The sentence sequence index.
 	 * @return A ParseTree object.
 	 */
-	public static ParseTree getInstance(String sExp, BigInteger p, long h, int M) {
+	public static ParseTree getInstance(String sExp, BigInteger p, BigInteger h, int M) {
 		return new ParseTree(sExp, p, h, M);
 	}
 
@@ -214,7 +213,7 @@ public class ParseTree {
 	private StringBuilder getBinaryString (Node node, StringBuilder sb) {
 		if (node == null) return sb;
 		for (Node n : node.children) sb = getBinaryString(n, sb);
-		if (ReadFile.isQuadraticResidue(node.N, node.N + this.h, this.p)) sb.append("1");
+		if (ReadFile.isQuadraticResidue(node.N, this.h, this.p)) sb.append("1");
 		else sb.append("0");
 		return sb;
 	}
