@@ -10,6 +10,9 @@ import src.main.utils.POSTags;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Stack;
+import java.util.Random;
+import java.math.BigInteger;
+import java.security.MessageDigest;
 
 /**
  * This object is given a Stanford syntactic parse tree s-expression and recreates the it.
@@ -26,7 +29,9 @@ public class ParseTree {
 
 	private Node root;
 	private HashSet<String> set = POSTags.getTags(); 
-	private String sentence;
+	private String sentence, binaryString;
+	private BigInteger p;
+	private long h;
 	private int M;
 
 	/**
@@ -56,9 +61,23 @@ public class ParseTree {
 	 * static factory method {@link getInstance()}.
 	 *
 	 * @param sExp The s-expression describing the parse tree.
+	 */
+	private ParseTree (String sExp) { 
+		growTree(sExp); 
+	}
+
+	/**
+	 * Private constructor for ParseTree rather use 
+	 * static factory method {@link getInstance()}.
+	 *
+	 * @param sExp The s-expression describing the parse tree.
+	 * @param p A BigInteger representation of a 20 digit prime.
+	 * @param h The truncated hash of p.
 	 * @param M The sentence sequence index.
 	 */
-	private ParseTree (String sExp, int M) { 
+	private ParseTree (String sExp, BigInteger p, long h, int M) { 
+		this.p = p;
+		this.h = h;
 		this.M = M;
 		growTree(sExp); 
 	}
@@ -67,11 +86,23 @@ public class ParseTree {
 	 * Preferable method of instantiation. Used to initialise the ParseTree object.
 	 *
 	 * @param sExp The s-expression describing the parse tree.
+	 * @return A ParseTree object.
+	 */
+	public static ParseTree getInstance(String sExp) {
+		return new ParseTree(sExp);
+	}
+	
+	/**
+	 * Preferable method of instantiation. Used to initialise the ParseTree object.
+	 *
+	 * @param sExp The s-expression describing the parse tree.
+	 * @param p A BigInteger representation of a 20 digit prime.
+	 * @param h The truncated hash of p.
 	 * @param M The sentence sequence index.
 	 * @return A ParseTree object.
 	 */
-	public static ParseTree getInstance(String sExp, int M) {
-		return new ParseTree(sExp, M);
+	public static ParseTree getInstance(String sExp, BigInteger p, long h, int M) {
+		return new ParseTree(sExp, p, h, M);
 	}
 
 	/**
@@ -158,6 +189,38 @@ public class ParseTree {
 	}
 
 	/** 
+	 * Generate the binary string of the parse tree as described by Atallah et. al (2001).
+	 *
+	 * <p> Complexity: O(N), where N is the number of node is the tree.
+	 *
+	 *@return The binary string.
+	 */
+	public String getBinaryString () {
+		preOrder();
+		return getBinaryString(this.root, new StringBuilder()).toString();
+	}
+
+	/**
+	 * Generate the binary string of the parse tree.This function is called recursively
+	 * by every node in the tree.This is a post-order travesal of the tree assigning 
+	 * each node a bit based on whether it is a quadratic residue or not.
+	 *
+	 * <p> Complexity: O(N), where N is the number of nodes in the tree.
+	 *
+	 * @param node The current node during traversal
+	 * @param sb StringBuilder constructing the binary string.
+	 * @return A StringBuilder of the binaryString.
+	 */
+	private StringBuilder getBinaryString (Node node, StringBuilder sb) {
+		if (node == null) return sb;
+		for (Node n : node.children) sb = getBinaryString(n, sb);
+		if (ReadFile.isQuadraticResidue(node.N, node.N + this.h, this.p)) sb.append("1");
+		else sb.append("0");
+		return sb;
+	}
+
+
+	/** 
 	 * Recreate the original sentence described by the tree. This function is recursively 
 	 * called by each node in the tree.
 	 *
@@ -196,9 +259,8 @@ public class ParseTree {
 
 
 	/**
-	 * Create an easily readable representation of the tree. This function is recursively 
-	 * called by each node in the tree. This a relatively expensive operation,
-	 * don't call lightly.
+	 * Create an easily readable representation of the tree. This a relatively expensive 
+	 * operation,don't call lightly.
 	 *
 	 * <p> Complexity: O(NlgN), where N is the number of nodes in the tree. 
 	 * Lazy implementation, there are probably methods to reduce to linear 
@@ -242,9 +304,9 @@ public class ParseTree {
 	 * @param args Standard input.
 	 */
 	public static void main(String[] args) {
-		String sexp = "( ROOT ( S ( NP ( DT The ) ( NN girl ) )"
-			+"( VP ( VBD chased ) ( NP ( DT the ) ( NN rabbit ) ) ) ) )" ;
-		ParseTree tree = ParseTree.getInstance(sexp, 0);
+		String sexp = "( ROOT ( S ( NP ( DT The ) ( NN girl ) ) "
+			+" ( VP ( VBD chased ) ( NP ( DT the ) ( NN rabbit ) ) ) ) )" ;
+		ParseTree tree = ParseTree.getInstance(sexp);
 		System.out.println(tree.toString());
 		System.out.println(tree.getSentence());
 	}

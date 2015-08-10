@@ -239,8 +239,5 @@ public class DependencyTree {
 				+ "5 rabbit rabbit NN";
 		DependencyTree tree = DependencyTree.getInstance(dep, lemma, 0);
 		System.out.println(tree.toString());
-		BigInteger p = BigInteger.probablePrime(64, new Random());
-		System.out.println(p);
-		System.out.println(p.hashCode());
 	}
 }

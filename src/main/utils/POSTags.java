@@ -45,7 +45,7 @@ public enum POSTags {
 	VBG ("VBG"),
 	VBN ("VBN"),
 	VBP ("VBP"),
-	VBZ ("WBZ"),
+	VBZ ("VBZ"),
 	WPS ("WP$"),
 	WRB ("WRB"),
 	CMM (","),
