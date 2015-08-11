@@ -130,9 +130,6 @@ public class ReadFile {
 	 * @return Whether x is a quadratic residue of q modulo p.
 	 */
 	public static boolean isQuadraticResidue (int x, BigInteger q, BigInteger p) {
-		BigInteger xb = new BigInteger(x*(x-1) + "");
-		BigInteger mod = xb.subtract(q).mod(p);
-		if (mod.equals(BigInteger.ZERO)) return true;
 		return false;
 	}
 
@@ -152,7 +149,7 @@ public class ReadFile {
 		if (args.length > 0) {
 			if (args[0].equals("-p")) 
 				forest = processParse(args[1], p, h);
-			//else if (args[0].equals("-d")) 
+			else if (args[0].equals("-d")) 
 				//forest = processDependency(args[1], args[2], p, h.longValue());
 			for (int i = 0; i < forest.length; i++)
 				System.out.println(forest[i].getBinaryString());
