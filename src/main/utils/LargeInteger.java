@@ -19,7 +19,7 @@ public class LargeInteger {
 
 	private LargeInteger(byte[] N) { this.N = new BigInteger(N); }
 
-	private LargeInteger (int signum, byte[] N) { this.N = new BigInteger(signum, N); }
+	private LargeInteger (int signum, byte[] val) { this.N = new BigInteger(signum, val); }
 
 	private LargeInteger (int bitlength, int certainty, Random rnd) {
 		this.N = new BigInteger(bitlength, certainty, rnd);
@@ -43,8 +43,8 @@ public class LargeInteger {
 
 	public static LargeInteger getInstance (byte[] N) { return new LargeInteger(N); }
 
-	public static LargeInteger getInstance (int signum, byte[] N) { 
-		return new LargeInteger(signum, N); 
+	public static LargeInteger getInstance (int signum, byte[] val) { 
+		return new LargeInteger(signum, val); 
 	}
 
 	public static LargeInteger getInstance (int bitlength, int certainty, Random rnd) { 
@@ -217,13 +217,46 @@ public class LargeInteger {
 		return new LargeInteger(this.N.xor(M.N).toString());
 	}
 
+	public long longValue () {
+		return this.N.longValue();
+	}
+
+	public int intValue () {
+		return this.N.intValue();
+	}
+
 	public static LargeInteger probablePrime (int bitlength, Random rnd) {
 		BigInteger p = BigInteger.probablePrime(bitlength, rnd);
 		return new LargeInteger(p.toString());
 	}
 	
+
+	public int compareTo (String M) {
+		return compareTo(LargeInteger.getInstance(M));
+	}
+
+	public int compareTo (int M) {
+		return compareTo(LargeInteger.getInstance(M));
+	}
+
+	public int compareTo (long M) {
+		return compareTo(LargeInteger.getInstance(M));
+	}
+
+	public int compareTo (short M) {
+		return compareTo(LargeInteger.getInstance(M));
+	}
+
 	public int compareTo(LargeInteger M) {
 		return this.N.compareTo(M.N);
+	}
+
+	public int bitLength () {
+		return this.N.bitLength();
+	}
+
+	public boolean testBit (int N) {
+		return this.N.testBit(N);
 	}
 
 	@Override public int hashCode () { return this.N.hashCode(); }

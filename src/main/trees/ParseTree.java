@@ -7,11 +7,12 @@
  *************************************************************************/
 package src.main.trees;
 import src.main.utils.POSTags;
+import src.main.utils.LargeInteger;
+import src.main.utils.TonelliShanks;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Stack;
 import java.util.Random;
-import java.math.BigInteger;
 import java.security.MessageDigest;
 
 /**
@@ -30,7 +31,7 @@ public class ParseTree {
 	private Node root;
 	private HashSet<String> set = POSTags.getTags(); 
 	private String sentence, binaryString;
-	private BigInteger p, h;
+	private LargeInteger p, h;
 	private int M;
 
 	/**
@@ -74,7 +75,7 @@ public class ParseTree {
 	 * @param h The truncated hash of p.
 	 * @param M The sentence sequence index.
 	 */
-	private ParseTree (String sExp, BigInteger p, BigInteger h, int M) { 
+	private ParseTree (String sExp, LargeInteger p, LargeInteger h, int M) { 
 		this.p = p;
 		this.h = h;
 		this.M = M;
@@ -100,7 +101,7 @@ public class ParseTree {
 	 * @param M The sentence sequence index.
 	 * @return A ParseTree object.
 	 */
-	public static ParseTree getInstance(String sExp, BigInteger p, BigInteger h, int M) {
+	public static ParseTree getInstance(String sExp, LargeInteger p, LargeInteger h, int M) {
 		return new ParseTree(sExp, p, h, M);
 	}
 
@@ -213,7 +214,7 @@ public class ParseTree {
 	private StringBuilder getBinaryString (Node node, StringBuilder sb) {
 		if (node == null) return sb;
 		for (Node n : node.children) sb = getBinaryString(n, sb);
-		if (ReadFile.isQuadraticResidue(node.N, this.h, this.p)) sb.append("1");
+		if (TonelliShanks.isQuadraticResidue(this.h.add(node.N), this.p)) sb.append("1");
 		else sb.append("0");
 		return sb;
 	}

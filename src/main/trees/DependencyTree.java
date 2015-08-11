@@ -9,7 +9,8 @@
 package src.main.trees;
 import src.main.utils.StdIn;
 import java.util.ArrayList;
-import java.math.BigInteger;
+import src.main.utils.TonelliShanks;
+import src.main.utils.LargeInteger;
 import java.util.Random;
 
 /**
@@ -25,7 +26,7 @@ public class DependencyTree {
 
 	private Node root;
 	private final int M;
-	private BigInteger p, h;
+	private LargeInteger p, h;
 
 	/**
 	 * This nested class describes the node of a tree. Each node can have an arbitrary
@@ -76,7 +77,7 @@ public class DependencyTree {
 	 * @param h the truncated hash of p
 	 * @param M The setentence index.
 	 */
-	private DependencyTree(String dep, String words, BigInteger p, BigInteger h, int M) { 
+	private DependencyTree(String dep, String words, LargeInteger p, LargeInteger h, int M) { 
 		this.M = M;
 		this.p = p;
 		this.h = h;
@@ -106,7 +107,7 @@ public class DependencyTree {
 	 * @param M The sentence index.
 	 * @return A DependencyTree object.
 	 */
-	public static DependencyTree getInstance(String dep, String lemma, BigInteger p, BigInteger h, int M) {
+	public static DependencyTree getInstance(String dep, String lemma, LargeInteger p, LargeInteger h, int M) {
 		return new DependencyTree(dep, lemma, p, h, M);
 	}
 
@@ -192,7 +193,7 @@ public class DependencyTree {
 	 *@return The binary string.
 	 */
 	public String getBinaryString () {
-		preOrder();
+		this.preOrder();
 		return getBinaryString(this.root, new StringBuilder()).toString();
 	}
 
@@ -210,7 +211,7 @@ public class DependencyTree {
 	private StringBuilder getBinaryString (Node node, StringBuilder sb) {
 		if (node == null) return sb;
 		for (Node n : node.dependents) sb = getBinaryString(n, sb);
-		if (ReadFile.isQuadraticResidue(node.N, this.h, this.p)) sb.append("1");
+		if (TonelliShanks.isQuadraticResidue(this.h.add(node.N), this.p)) sb.append("1");
 		else sb.append("0");
 		return sb;
 	}
