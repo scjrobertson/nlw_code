@@ -1,11 +1,38 @@
+/*************************************************************************************************************************************
+ * Compilation: javac src/main/utils/TonelliShanks.java
+ * Execution: java src.main.utils.TonelliShanks
+ * Dependencies: 
+ *
+ * Contains useful functions such as modulus power, legendre symbols which are used by the Tonnelli-Shanks algorithm.
+ *******************************************************/
 package src.main.utils;
 import java.math.BigInteger;
 import java.util.Stack;
-
+/**
+ * This library implements the Tonelli-Shanks algorithm.This algortihm solves
+ * the congruence x^2 = q (mod p) given q and p.
+ *
+ *@author SCJ Robertson, 16579852
+ *@since 11/08/15
+ */
 public class TonelliShanks {
 
+	/**
+	 * Library of static functions.
+	 */
 	private TonelliShanks () {}
 
+	/**
+	 * Solves the modulus power (a^e)%m for large integers, typically 20 digits ( approx 64 bits)
+	 * and over.
+	 *
+	 * <p> Complexity: O(N) where N is the number of bits in the exponent's binary representation.
+	 *
+	 * @param a The base of the exponent
+	 * @param e The exponent 
+	 * @param m The modulus m
+	 * @return The result of the equation as a large integer.
+	 */
 	public static LargeInteger pow(LargeInteger a, LargeInteger e, LargeInteger m) {
 		LargeInteger result = LargeInteger.getInstance(1);
 		a = a.mod(m);
@@ -16,21 +43,49 @@ public class TonelliShanks {
 		return result;
 	}	
 
+	/**
+	 * The Legendre symbol for a given a prime p.It will return 1 if a
+	 * is a quadratic residue, else it will return -1.
+	 *
+	 * <p> Complexity: O(N) where N is the number of bits in (p-1)/2's binary representation.
+	 *
+	 * @param a A integer which is potentially a quadratic residue
+	 * @param p A prime which is used as the mod
+	 * @return The Legendre symbol for a given p
+	 */
 	public static int legendreSymbol (LargeInteger a, LargeInteger p) {
 		LargeInteger ls = pow(a, p.subtract(1).divide(2), p);
 		if (ls.equals(p.subtract(1))) return -1;
 		else return ls.intValue();
 	}
 
-
-	public static boolean isQuadraticResidue(LargeInteger q, LargeInteger p) {
-		LargeInteger[] qr = quadraticResidues(q, p);
-		if (qr == null) return false;
+	/**
+	 * Determines whether a number is a quadratic residue modulo p.
+	 * 
+	 * <p> Complexity: O(N) where N is the number of bits in (p-1)/2's binary representation.
+	 *
+	 * @param a A integer which is potentially a quadratic residue
+	 * @param p A prime which is used as the mod
+	 * @return A boolean whether a is a residue or not.
+	 */
+	public static boolean isQuadraticResidue(LargeInteger a, LargeInteger p) {
+		a = a.mod(p);
+		if (legendreSymbol(a, p) != 1) { return false; }
 		return true;
 	}
 
-	public static LargeInteger[] quadraticResidues 
-		(LargeInteger a, LargeInteger p) {
+	/**
+	 * Determines the solution of the congruence x^2 = q (mod p), given q and p.
+	 *
+	 * <p> Complexity: O(2m + 2k + S(S-1)/4) + 1/(2^(S-1)))
+	 * m is the number of bits in q and k the number of 1s in p's binary representation.
+	 * S is the number of even primes when (p-1) is decomposed into a product of primes.
+	 *
+	 * @param a A integer which is potentially a quadratic residue
+	 * @param p A prime which is used as the mod
+	 * @return An array of at most two solutions to the congruence.
+	 */
+	public static LargeInteger[] quadraticResidues (LargeInteger a, LargeInteger p) {
 			LargeInteger[] qr = new LargeInteger[2];
 			LargeInteger b, c, d, e, q, t, x, z;
 			int i, m, s;
@@ -83,10 +138,14 @@ public class TonelliShanks {
 			return qr;
 	}
 
+	/**
+	 * A small example of output.
+	 *
+	 * @param args Standard input.
+	 */
 	public static void main (String[] args) {
-		LargeInteger q = LargeInteger.getInstance("11608072225007531083");
-		LargeInteger p = LargeInteger.getInstance("526541896879662857").add(2);
-
+		LargeInteger p = LargeInteger.getInstance("11608072225007531083");
+		LargeInteger q = LargeInteger.getInstance("526541896879662857");
 		System.out.println(isQuadraticResidue(q, p));
 	}
 }

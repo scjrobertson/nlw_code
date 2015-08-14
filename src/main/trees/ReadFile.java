@@ -132,11 +132,13 @@ public class ReadFile {
 		LargeInteger h = getHash(md, p.toString(), 8);
 		System.out.println(p + "\t" + h);
 
-		DependencyTree[] forest = null;
+		Tree[] forest = null;
 		if (args.length > 0) {
-			//if (args[0].equals("-p")) forest = processParse(args[1], p, h);
+			if (args[0].equals("-p")) forest = processParse(args[1], p, h);
 			if (args[0].equals("-d")) forest = processDependency(args[1], args[2], p, h);
-			for (int i = 0; i < forest.length; i++) System.out.println(forest[i].getBinaryString());
+			for (int i = 0; i < forest.length; i++) 
+				//System.out.println(forest[i] + "\n" + forest[i].getBinaryString());
+				System.out.println(forest[i].getSentence());
 		}
 	}
 }

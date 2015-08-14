@@ -18,9 +18,6 @@ public class ReadFileTest {
 	}
 
 	@Test public void testQuadraticResidue() {
-		BigInteger p = new BigInteger("10");
-		BigInteger h = new BigInteger("2");
-		assertEquals(ReadFile.isQuadraticResidue(4, h, p), true);
 	}
 
 	@After public void tearDown() {}

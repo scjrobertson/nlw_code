@@ -26,7 +26,7 @@ import java.security.MessageDigest;
  *@author SCJ Robertson, 16579852
  *@since 01/08/15
  */
-public class ParseTree {
+public class ParseTree extends Tree {
 
 	private Node root;
 	private HashSet<String> set = POSTags.getTags(); 
@@ -133,8 +133,7 @@ public class ParseTree {
 
 	/** 
 	 * This function performs a pre-order traversal of the tree assigning each node
-	 * a consecutive number based on order of inspection. This function is recursively 
-	 * called by each node in the tree.
+	 * a consecutive number based on order of inspection. 	
 	 *
 	 * <p> Complexity: O(N), where N is the number of nodes in the tree.
 	 */
@@ -191,7 +190,8 @@ public class ParseTree {
 	/** 
 	 * Generate the binary string of the parse tree as described by Atallah et. al (2001).
 	 *
-	 * <p> Complexity: O(N), where N is the number of node is the tree.
+	 * <p> Complexity: O(NM), where N is the number of node is the tree and M is 
+	 * the number of bits in p-1 binary representation, typically 64.
 	 *
 	 *@return The binary string.
 	 */
@@ -205,7 +205,8 @@ public class ParseTree {
 	 * by every node in the tree.This is a post-order travesal of the tree assigning 
 	 * each node a bit based on whether it is a quadratic residue or not.
 	 *
-	 * <p> Complexity: O(N), where N is the number of nodes in the tree.
+	 * <p> Complexity: O(NM), where N is the number of node is the tree and M is 
+	 * the number of bits in p-1 binary representation, typically 64.
 	 *
 	 * @param node The current node during traversal
 	 * @param sb StringBuilder constructing the binary string.

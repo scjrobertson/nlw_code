@@ -8,6 +8,7 @@
  *************************************************************************/
 package src.main.trees;
 import src.main.utils.StdIn;
+import java.util.Arrays;
 import java.util.ArrayList;
 import src.main.utils.TonelliShanks;
 import src.main.utils.LargeInteger;
@@ -22,11 +23,13 @@ import java.util.Random;
  *@author SCJ Robertson, 16579852
  *@since 05/08/15
  */
-public class DependencyTree {
+public class DependencyTree extends Tree {
 
 	private Node root;
-	private final int M;
-	private LargeInteger p, h;
+	private final int K;
+	private LargeInteger p;
+	private LargeInteger h;
+	private ArrayList<Node> sentence;
 
 	/**
 	 * This nested class describes the node of a tree. Each node can have an arbitrary
@@ -34,9 +37,13 @@ public class DependencyTree {
 	 * from the client.
 	*/
 	private class Node {
-		private String gov_rel, word, lemma, tag;
+		private String gov_rel;
+		private String word;
+		private String lemma;
+		private String tag;
 		private ArrayList<Node> dependents = new ArrayList<Node>();
 		private int N;
+		private int M;
 
 		/* Instantiates the Node object.
 		 *
@@ -59,10 +66,10 @@ public class DependencyTree {
 	 *
 	 * @param dep The simplified Stanford dependencies for the sentence.
 	 * @param words The POS tags and lemmas of the sentence.
-	 * @param M The setentence index.
+	 * @param K The setentence index.
 	 */
-	private DependencyTree(String dep, String words, int M) { 
-		this.M = M;
+	private DependencyTree(String dep, String words, int K) { 
+		this.K = K;
 		growTree(dep, plantTree(words)); 
 	}
 
@@ -75,10 +82,10 @@ public class DependencyTree {
 	 * @param words The POS tags and lemmas of the sentence.
 	 * @param p BigInteger representation of a 20 digit prime.
 	 * @param h the truncated hash of p
-	 * @param M The setentence index.
+	 * @param K The setentence index.
 	 */
-	private DependencyTree(String dep, String words, LargeInteger p, LargeInteger h, int M) { 
-		this.M = M;
+	private DependencyTree(String dep, String words, LargeInteger p, LargeInteger h, int K) { 
+		this.K = K;
 		this.p = p;
 		this.h = h;
 		growTree(dep, plantTree(words)); 
@@ -89,11 +96,11 @@ public class DependencyTree {
 	 *
 	 * @param dep The simplified Stanford dependencies for the sentence.
 	 * @param words The POS tags and lemmas of the sentence.
-	 * @param M The sentence index.
+	 * @param K The sentence index.
 	 * @return A DependencyTree object.
 	 */
-	public static DependencyTree getInstance(String dep, String lemma, int M) {
-		return new DependencyTree(dep, lemma, M);
+	public static DependencyTree getInstance(String dep, String lemma, int K) {
+		return new DependencyTree(dep, lemma, K);
 	}
 
 
@@ -104,11 +111,11 @@ public class DependencyTree {
 	 * @param words The POS tags and lemmas of the sentence.
 	 * @param p BigInteger representation of a 20 digit prime.
 	 * @param h The truncated hash of p.
-	 * @param M The sentence index.
+	 * @param K The sentence index.
 	 * @return A DependencyTree object.
 	 */
-	public static DependencyTree getInstance(String dep, String lemma, LargeInteger p, LargeInteger h, int M) {
-		return new DependencyTree(dep, lemma, p, h, M);
+	public static DependencyTree getInstance(String dep, String lemma, LargeInteger p, LargeInteger h, int K) {
+		return new DependencyTree(dep, lemma, p, h, K);
 	}
 
 	/**
@@ -130,6 +137,7 @@ public class DependencyTree {
 			tk = words[i].split("\u00A0");
 			seed[i+1] = new Node(tk[1], tk[2], tk[3]);
 		}
+		this.sentence = new ArrayList<Node>(Arrays.asList(seed));
 		return seed;
 	}
 
@@ -188,7 +196,8 @@ public class DependencyTree {
 	/** 
 	 * Generate the binary string of the parse tree as described by Atallah et. al (2001).
 	 *
-	 * <p> Complexity: O(N), where N is the number of node is the tree.
+	 * <p> Complexity: O(NM), where N is the number of node is the tree and M is the number 
+	 * of bits in (p-1)'s binary representation, typically 64.
 	 *
 	 *@return The binary string.
 	 */
@@ -202,7 +211,8 @@ public class DependencyTree {
 	 * by every node in the tree.This is a post-order travesal of the tree assigning 
 	 * each node a bit based on whether it is a quadratic residue or not.
 	 *
-	 * <p> Complexity: O(N), where N is the number of nodes in the tree.
+	 * <p> Complexity: O(NM), where N is the number of node is the tree and M is the number 
+	 * of bits in (p-1)'s binary representation, typically 64.
 	 *
 	 * @param node The current node during traversal
 	 * @param sb StringBuilder constructing the binary string.
@@ -247,9 +257,38 @@ public class DependencyTree {
 
 
 
+	/** 
+	 * Recreate the original sentence described by the tree. This function is recursively 
+	 * called by each node in the tree.
+	 *
+	 * <p> Complexity: O(N), where N is the number of nodes in the tree.
+	 * 
+	 * @return The sentence desribed by the parse tree.
+	 */
+	public String getSentence () {
+		StringBuilder sb = new StringBuilder();
+		for (Node n : sentence) {
+			if (n.word != null) sb.append(n.word + " ");
+		}
+		return sb.toString();
+	}
+
+	/** 
+	 * Recreate the original sentence described by the tree. This function is recursively 
+	 * called by each node in the tree.
+	 *
+	 * <p> Complexity: O(N), where N is the number of nodes in the tree.
+	 *
+	 * @param node The current node during traversal.
+	 * @param sb The sentence under construction. Stringbuilder passed by reference to
+	 * 		avoid memory overhed of immutable string class.
+	 * @return The current sentence fragment under construction.
+	 */
+	private void getSentence (Node nod) {
+	}
+
 	/**
-	 * Create an easily readable representation of the tree. This function is recursively 
-	 * called by each node in the tree. This a relatively expensive operation,
+	 * Create an easily readable representation of the tree. This a relatively expensive operation,
 	 * don't call lightly.
 	 *
 	 * <p> Complexity: O(NlgN), where N is the number of nodes in the tree. 
@@ -282,7 +321,7 @@ public class DependencyTree {
 		for(int i = 0; i < j; i++) sb.append("    ");
 		j++;
 		if (node.word == null) sb.append(node.tag + "\n");
-		else sb.append(node.gov_rel + " => " + node.word + "\n");
+		else sb.append(node.gov_rel + " => " + node.word + " (" + node.tag + ")\n");
 		for(Node n : node.dependents) sb = sketchTree(n, sb, j);
 		return sb;
 	}
