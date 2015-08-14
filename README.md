@@ -10,8 +10,8 @@
 + JDK and JRE 8
 - Download Stanford coreNLP, simpleNLG-v.4.4.2. A bash script using wget is placed in the nlw_code/src/main/resources folder
 which will automatically dowload them upon execution. To compile this, run the following commands:
-    * chmod a+x download.sh
-    * ./download.sh
+    chmod a+x download.sh
+    ./download.sh
 - Install XMLStarlet : sudo apt-get install xmlstarlet
 
 ## Running current setup ##
@@ -24,7 +24,6 @@ found in nlw_code/src/main/trees, it is compiled as follows:
     * ./core_stanford.sh text.txt
 
 This will create three output files for each input file:
-
     * text_lemma.txt - The POS tags and lemmas of the sentence.
     * text_dep.txt - The basic dependencies describing the text.
     * text_parse.txt - The syntacting parse trees s-expressions.
