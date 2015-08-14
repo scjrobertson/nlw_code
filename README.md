@@ -14,7 +14,7 @@ which will automatically dowload them upon execution. To compile this, run the f
         chmod a+x download.sh
         ./download.sh
 
-    **Warning**: If the script doesn't work follow its links and extract manually.
+    **Warning**: If the script doesn't work, follow its links and extract manually.
 
 * Install **XMLStarlet**, used for searching XML documents: 
 
