@@ -60,6 +60,8 @@ The compilation instruction for each individual Java file is included in the com
 ### Who do I talk to? ###
 
 SCJ Robertson
+
 **Contact**
+
 * 16579852@sun.ac.za
 * robertsonscj@gmail.com
