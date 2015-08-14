@@ -7,14 +7,14 @@
 ### How do I get set up? ###
 
 * A Debian-based Linux distribution (requires running bash scripts).
-+ JDK and JRE 8
-- Download Stanford coreNLP, simpleNLG-v.4.4.2. A bash script using wget is placed in the nlw_code/src/main/resources folder
+* JDK and JRE 8
+* Download Stanford coreNLP, simpleNLG-v.4.4.2. A bash script using wget is placed in the nlw_code/src/main/resources folder
 which will automatically dowload them upon execution. To compile this, run the following commands:
 
-    * chmod a+x download.sh
-    * ./download.sh
+    chmod a+x download.sh
+    ./download.sh
 
-- Install XMLStarlet : 
+* Install XMLStarlet : 
 
     sudo apt-get install xmlstarlet
 
