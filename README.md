@@ -58,7 +58,7 @@ The compilation instruction for each individual Java file is included in the com
     mkdir documentation
     javadoc -d documentation src.main.trees src.main.utils
 
-**Warning**: There may be some errors in the javadoc comments causing the extraction to fail, src.main.trees has some guarantee of working. The API can then be viewed comfortably in a browser rather than sifting through code.
+**Warning**: There may be some errors in the javadoc comments causing the extraction to fail, src.main.trees has some guarantee of working. The API can now be viewed comfortably in a browser rather than sifting through code.
 
 ### Who do I talk to? ###
 
