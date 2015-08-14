@@ -54,7 +54,7 @@ For syntactic parse trees the **-p** flag is used:
 
     java src.main.trees.ReadFile -p src/main/trees/text_parse.txt
 
-The compilation instruction for each individual Java file is included in the comments. The original code makes use of **javadoc** comments and the API can extracted, from the root folder **nlw_code/**, as follows:
+The compilation instruction for each individual Java file is included in the comments. The original code makes use of **javadoc** comments and the API can be extracted from the root folder **nlw_code/**, as follows:
 
     mkdir documentation
     javadoc -d documentation src.main.trees src.main.utils
