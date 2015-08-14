@@ -15,7 +15,7 @@ To compile this, run the following commands:
         chmod a+x download.sh
         ./download.sh
 
-    **Warning**: If the script doesn't work, follow its links and extract the relevant files manually.
+    **Note**: If the script doesn't work, follow its links and extract the relevant files manually.
 
 * Install **XMLStarlet**, used for searching XML documents: 
 
