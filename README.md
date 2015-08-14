@@ -14,6 +14,7 @@ which will automatically dowload them upon execution. To compile this, run the f
         chmod a+x download.sh
         ./download.sh
 
+
 * Install **XMLStarlet**, used for searching XML documents: 
 
         sudo apt-get install xmlstarlet
@@ -33,7 +34,7 @@ This will create three output files for each input file:
 * text_dep.txt - The basic dependencies describing the text.
 * text_parse.txt - The syntacting parse trees' s-expressions.
 
-Two bodies of text **moby.txt** and **sense.txt** have been included to run as examples.
+Two bodies of text **moby.txt** and **sense.txt** have been included in **nlw_code/src/main/trees/** to run as examples.
 
 ### Output parse trees and binary strings ###
 The current implementation only re-parses the Stanford coreNLP output and
