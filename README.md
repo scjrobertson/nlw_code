@@ -32,9 +32,9 @@ found in **nlw_code/src/main/trees**, it is compiled as follows:
 
 This will create three output files for each input file:
 
-* text_lemma.txt - The POS tags and lemmas of the sentence.
+* text_lemma.txt - The POS tags and lemmas of the sentences.
 * text_dep.txt - The basic dependencies describing the text.
-* text_parse.txt - The syntacting parse trees' s-expressions.
+* text_parse.txt - The syntactic parse trees' s-expressions.
 
 Two bodies of text **moby.txt** and **sense.txt** have been included in **nlw_code/src/main/trees/** to run as examples. Any body of plain text
 is suitable for parsing.
