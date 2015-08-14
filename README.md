@@ -8,22 +8,21 @@
 
 * A Debian-based Linux distribution (requires running bash scripts).
 * JDK and JRE 8
-* Download Stanford coreNLP, simpleNLG-v.4.4.2. A bash script using wget is placed in the nlw_code/src/main/resources folder
+* Download **Stanford coreNLP**, **simpleNLG-v.4.4.2**. A bash script using **wget** is placed in the **nlw_code/src/main/resources** folder
 which will automatically dowload them upon execution. To compile this, run the following commands:
 
         chmod a+x download.sh
         ./download.sh
 
-* Install XMLStarlet : 
+* Install **XMLStarlet**, used for searching XML documents: 
 
         sudo apt-get install xmlstarlet
-
 
 ## Running current setup ##
 
 ### Parsing a plain text document ###
-To parse an input body of text using the Stanford coreNLP, compile and run core_standford.sh. This bash script is 
-found in nlw_code/src/main/trees, it is compiled as follows:
+To parse an input body of text using the Stanford coreNLP, compile and run **core_standford.sh**. This bash script is 
+found in **nlw_code/src/main/trees**, it is compiled as follows:
 
      chmod a+x core_stanford.txt
      ./core_stanford.sh text.txt
@@ -39,7 +38,7 @@ Two bodies of text moby.txt and sense.txt have been included to run as examples.
 ### Output parse trees and binary strings ###
 The current implementation only re-parses the Stanford coreNLP output and
 allows the binary strings of each sentence to be generated. The Java files can be compiled
-from the root folder nlw_code/ as follows:
+from the root folder **nlw_code/** as follows:
 
     javac src/main/trees/ReadFile.java
 
