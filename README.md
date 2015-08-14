@@ -37,11 +37,16 @@ This will create three output files for each input file:
 The current implementation only re-parses the Stanford coreNLP output and
 allows the binary strings of each sentence to be generated. The Java files can be compiled
 from the root folder nlw_code/ as follows:
-* javac src/main/trees/ReadFile.java
+
+    * javac src/main/trees/ReadFile.java
+
 The file is then run using one of two flags. For dependency output, the -d flag is used:
-* java src.main.trees.ReadFile -d src/main/trees/text_dep.txt src/main/trees/text_lemma.txt
+
+    * java src.main.trees.ReadFile -d src/main/trees/text_dep.txt src/main/trees/text_lemma.txt
+
 For syntactic parse trees the -p flag is used:
-* java src.main.trees.ReadFile -p src/main/trees/text_parse.txt
+
+    * java src.main.trees.ReadFile -p src/main/trees/text_parse.txt
 
 ### Who do I talk to? ###
 
