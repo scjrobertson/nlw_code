@@ -9,7 +9,8 @@
 * A (preferably Debian-based) Linux distribution, this setup requires running bash scripts.
 * JDK and JRE 8 (7 may work as well)
 * Download **Stanford coreNLP**, **simpleNLG-v.4.4.2**. A bash script using **wget** and the archive manager **file-roller** is placed in the **nlw_code/src/main/resources** folder
-which will automatically download them upon execution. To compile this, run the following commands:
+which will automatically download them upon execution. 
+To compile this, run the following commands:
 
         chmod a+x download.sh
         ./download.sh
