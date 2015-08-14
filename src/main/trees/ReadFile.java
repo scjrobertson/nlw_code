@@ -130,15 +130,14 @@ public class ReadFile {
 		LargeInteger p = LargeInteger.probablePrime(64, new Random());
 		MessageDigest md = getHashAlgorithm("SHA-1");
 		LargeInteger h = getHash(md, p.toString(), 8);
-		System.out.println(p + "\t" + h);
+		System.out.println(p + "\t" + h + "\n");
 
 		Tree[] forest = null;
 		if (args.length > 0) {
 			if (args[0].equals("-p")) forest = processParse(args[1], p, h);
 			if (args[0].equals("-d")) forest = processDependency(args[1], args[2], p, h);
 			for (int i = 0; i < forest.length; i++) 
-				//System.out.println(forest[i] + "\n" + forest[i].getBinaryString());
-				System.out.println(forest[i].getSentence());
+				System.out.println(forest[i].getSentence() + "\n" + forest[i] + "\n" + forest[i].getBinaryString() + "\n");
 		}
 	}
 }
