@@ -14,7 +14,9 @@ which will automatically dowload them upon execution. To compile this, run the f
     * chmod a+x download.sh
     * ./download.sh
 
-- Install XMLStarlet : sudo apt-get install xmlstarlet
+- Install XMLStarlet : 
+
+    * sudo apt-get install xmlstarlet
 
 ## Running current setup ##
 
