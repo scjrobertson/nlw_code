@@ -18,6 +18,7 @@ which will automatically dowload them upon execution. To compile this, run the f
 
     sudo apt-get install xmlstarlet
 
+
 ## Running current setup ##
 
 ### Parsing a plain text document ###
