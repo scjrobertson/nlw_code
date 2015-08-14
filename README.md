@@ -16,7 +16,7 @@ which will automatically dowload them upon execution. To compile this, run the f
 
 - Install XMLStarlet : 
 
-    * sudo apt-get install xmlstarlet
+    sudo apt-get install xmlstarlet
 
 ## Running current setup ##
 
