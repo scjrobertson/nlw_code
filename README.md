@@ -52,10 +52,10 @@ For syntactic parse trees the -p flag is used:
 
 The compilation instruction for each individual Java file is included in the comments. The original code makes use of **javadoc** comments and the API can extracted, from the root folder **nlw_code/**, as follows:
 
-  mkdir documentation
-  javadoc -d documentation src.main.trees src.main.utils
+    mkdir documentation
+    javadoc -d documentation src.main.trees src.main.utils
 
-**Warning**: there may be some errors in the javadoc comments causing the extraction to fail. These comments were mostly done haphazardly.
+**Warning**: There may be some errors in the javadoc comments causing the extraction to fail. These comments were mostly done haphazardly.
 ### Who do I talk to? ###
 
 * SCJ Robertson, 16579852
