@@ -28,9 +28,9 @@ found in nlw_code/src/main/trees, it is compiled as follows:
      ./core_stanford.sh text.txt
 
 This will create three output files for each input file:
-    * text_lemma.txt - The POS tags and lemmas of the sentence.
-    * text_dep.txt - The basic dependencies describing the text.
-    * text_parse.txt - The syntacting parse trees s-expressions.
+* text_lemma.txt - The POS tags and lemmas of the sentence.
+* text_dep.txt - The basic dependencies describing the text.
+* text_parse.txt - The syntacting parse trees s-expressions.
 
 ### Output parse trees and binary strings ###
 The current implementation only re-parses the Stanford coreNLP output and
