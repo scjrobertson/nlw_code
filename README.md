@@ -45,13 +45,13 @@ from the root folder **nlw_code/** as follows:
 
     javac src/main/trees/ReadFile.java
 
-The file is then run using one of two flags. For dependency output, the -d flag is used:
+The file is then run using one of two flags. For dependency output, the **-d** flag is used:
 
-    java src.main.trees.ReadFile **-d** src/main/trees/text_dep.txt src/main/trees/text_lemma.txt
+    java src.main.trees.ReadFile -d src/main/trees/text_dep.txt src/main/trees/text_lemma.txt
 
-For syntactic parse trees the -p flag is used:
+For syntactic parse trees the **-p** flag is used:
 
-    java src.main.trees.ReadFile **-p** src/main/trees/text_parse.txt
+    java src.main.trees.ReadFile -p src/main/trees/text_parse.txt
 
 The compilation instruction for each individual Java file is included in the comments. The original code makes use of **javadoc** comments and the API can extracted, from the root folder **nlw_code/**, as follows:
 
