@@ -31,7 +31,7 @@ This will create three output files for each input file:
 
 * text_lemma.txt - The POS tags and lemmas of the sentence.
 * text_dep.txt - The basic dependencies describing the text.
-* text_parse.txt - The syntacting parse trees s-expressions.
+* text_parse.txt - The syntacting parse trees' s-expressions.
 
 Two bodies of text **moby.txt** and **sense.txt** have been included to run as examples.
 
