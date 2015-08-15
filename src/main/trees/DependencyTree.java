@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import src.main.utils.TonelliShanks;
 import src.main.utils.LargeInteger;
 import java.util.Random;
+import src.main.nlg.PhraseFactory;
+import simplenlg.framework.*;
+import simplenlg.phrasespec.*;
 
 /**
  * This object is given both a simplified POS and dependency expressions and recreates
@@ -30,6 +33,7 @@ public class DependencyTree extends Tree {
 	private LargeInteger p;
 	private LargeInteger h;
 	private ArrayList<Node> sentence;
+	private PhraseFactory factory;
 
 	/**
 	 * This nested class describes the node of a tree. Each node can have an arbitrary
@@ -83,11 +87,13 @@ public class DependencyTree extends Tree {
 	 * @param p BigInteger representation of a 20 digit prime.
 	 * @param h the truncated hash of p
 	 * @param K The setentence index.
+	 * @param factory A phrase factory for sentence realisation.
 	 */
-	private DependencyTree(String dep, String words, LargeInteger p, LargeInteger h, int K) { 
+	private DependencyTree(String dep, String words, LargeInteger p, LargeInteger h, int K, PhraseFactory factory) { 
 		this.K = K;
 		this.p = p;
 		this.h = h;
+		this.factory = factory;
 		growTree(dep, plantTree(words)); 
 	}
 
@@ -112,10 +118,11 @@ public class DependencyTree extends Tree {
 	 * @param p BigInteger representation of a 20 digit prime.
 	 * @param h The truncated hash of p.
 	 * @param K The sentence index.
+	 * @param factory A phrase factory for sentence realisation.
 	 * @return A DependencyTree object.
 	 */
-	public static DependencyTree getInstance(String dep, String lemma, LargeInteger p, LargeInteger h, int K) {
-		return new DependencyTree(dep, lemma, p, h, K);
+	public static DependencyTree getInstance(String dep, String lemma, LargeInteger p, LargeInteger h, int K, PhraseFactory factory) {
+		return new DependencyTree(dep, lemma, p, h, K, factory);
 	}
 
 	/**
@@ -258,8 +265,7 @@ public class DependencyTree extends Tree {
 
 
 	/** 
-	 * Recreate the original sentence described by the tree. This function is recursively 
-	 * called by each node in the tree.
+	 * Recreate the original sentence described by the tree.
 	 *
 	 * <p> Complexity: O(N), where N is the number of nodes in the tree.
 	 * 
@@ -267,10 +273,22 @@ public class DependencyTree extends Tree {
 	 */
 	public String getSentence () {
 		StringBuilder sb = new StringBuilder();
-		for (Node n : sentence) {
-			if (n.word != null) sb.append(n.word + " ");
-		}
+		for (Node n : this.sentence) if (n.word != null) sb.append(n.word + " ");
 		return sb.toString();
+	}
+
+
+	/** 
+	 * Recreate the original sentence described by the tree. 
+	 *
+	 * <p> Complexity: O(N), where N is the number of nodes in the tree.
+	 * 
+	 * @return The sentence desribed by the parse tree.
+	 */
+	public String generateSentence() {
+		NLGElement p = this.factory.getClause();
+		generateSentence(this.root.dependents.get(0), p);
+		return this.factory.realiseSentence(p);
 	}
 
 	/** 
@@ -278,13 +296,12 @@ public class DependencyTree extends Tree {
 	 * called by each node in the tree.
 	 *
 	 * <p> Complexity: O(N), where N is the number of nodes in the tree.
-	 *
-	 * @param node The current node during traversal.
-	 * @param sb The sentence under construction. Stringbuilder passed by reference to
-	 * 		avoid memory overhed of immutable string class.
-	 * @return The current sentence fragment under construction.
 	 */
-	private void getSentence (Node nod) {
+	private void generateSentence (Node node, NLGElement p) {
+		if (node == null) return;
+		this.factory.applyDependency((SPhraseSpec) p, node.lemma, node.tag, node.gov_rel);
+		for (Node n : node.dependents) generateSentence(n, p);
+		return;
 	}
 
 	/**

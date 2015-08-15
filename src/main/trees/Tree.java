@@ -1,3 +1,4 @@
+
 /*************************************************************************
  *  Compilation:  javac src/main/trees/Tree.java
  *  Execution:    java src.main.trees.Tree
@@ -34,10 +35,16 @@ public abstract class Tree {
 	/** 
 	 * Recreate the original sentence described by the tree. 
 	 *
-	 * @return The sentence desribed by the parse tree.
+	 * @return The sentence described by the parse tree.
 	 */
 	abstract String getSentence();
 	 
+	/**
+	 * Recreate the sentence described by the tree.
+	 *
+	 * @return The sentence described by the tree.
+	 */
+	abstract String generateSentence();
 
 	/** 
 	 * This function performs a pre-order traversal of the tree assigning each node

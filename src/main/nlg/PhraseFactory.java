@@ -7,8 +7,10 @@ import simplenlg.features.*;
 
 public class PhraseFactory {
 
+
 	private Lexicon lexicon = Lexicon.getDefaultLexicon();
-	private NLGFactory nlgFactory = new NLGFactory(lexicon);
+	private	NLGFactory nlgFactory = new NLGFactory(lexicon);
+	private	Realiser realiser = new Realiser(lexicon); 
 
 	private PhraseFactory () {}
 
@@ -16,24 +18,17 @@ public class PhraseFactory {
 		return new PhraseFactory();
 	}
 
-	public  NLGElement createPhrase () {
-		return nlgFactory.createClause();
+	public SPhraseSpec getClause () {
+		return this.nlgFactory.createClause();
+	}
+
+	public void applyDependency (SPhraseSpec p, String lemma, String pos, String dep) {
+	}
+
+	public String realiseSentence(NLGElement e) {
+		return this.realiser.realiseSentence(e);
 	}
 
 	public static void main (String[] args) {
-		Lexicon lexicon = Lexicon.getDefaultLexicon();
-		NLGFactory nlgFactory = new NLGFactory(lexicon);
-		Realiser realiser = new Realiser(lexicon);
-		PhraseElement verb = nlgFactory.createVerbPhrase("chase");
-		PhraseElement subj = nlgFactory.createNounPhrase("girl");
-		PhraseElement obj = nlgFactory.createNounPhrase("rabbit");
-		obj.setDeterminer("a");
-		subj.setDeterminer("the");
-		PhraseElement p = nlgFactory.createClause();
-		verb.setParent(p);
-		obj.setParent(p);
-		subj.setParent(p);
-		System.out.println(verb.getRealisation());
-
 	}
 }

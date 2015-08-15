@@ -15,6 +15,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Random;
 import java.util.Arrays;
 import java.security.MessageDigest;
+import src.main.nlg.PhraseFactory;
 
 /**
  * This is a library of static methods used to easily process large inputs.
@@ -77,14 +78,16 @@ public class ReadFile {
 	 * @param pos The pos tags of the text, see format. 
 	 * @param p BigInteger representation of a 20 digit prime.
 	 * @param h The hash of the prime p
+	 * @param factory A phrase factory for sentence realisation.
 	 * @return An array of DependencyTree objects.
 	 */
-	public static DependencyTree[] processDependency (String dep, String pos, LargeInteger p, LargeInteger h) {
+	public static DependencyTree[] processDependency (String dep, String pos, LargeInteger p, LargeInteger h,
+			PhraseFactory factory) {
 		String[] deps = fileToString(dep).split("\n\n");
 		String[] tags = fileToString(pos).split("\n\n");
 		DependencyTree[] forest = new DependencyTree[tags.length];
 		for (int i = 0; i < tags.length; i++) 
-			forest[i] = DependencyTree.getInstance(deps[i], tags[i], p, h, i);
+			forest[i] = DependencyTree.getInstance(deps[i], tags[i], p, h, i, factory);
 		return forest;
 	}
 
@@ -130,14 +133,22 @@ public class ReadFile {
 		LargeInteger p = LargeInteger.probablePrime(64, new Random());
 		MessageDigest md = getHashAlgorithm("SHA-1");
 		LargeInteger h = getHash(md, p.toString(), 8);
+		PhraseFactory factory = PhraseFactory.getInstance();
 		System.out.println(p + "\t" + h + "\n");
 
 		Tree[] forest = null;
+		ParseTree[] f = null;
 		if (args.length > 0) {
 			if (args[0].equals("-p")) forest = processParse(args[1], p, h);
-			if (args[0].equals("-d")) forest = processDependency(args[1], args[2], p, h);
-			for (int i = 0; i < forest.length; i++) 
+			if (args[0].equals("-d")) forest = processDependency(args[1], args[2], p, h, factory);
+			for (int i = 0; i < forest.length; i++) {  
 				System.out.println(forest[i].getSentence() + "\n" + forest[i] + "\n" + forest[i].getBinaryString() + "\n");
+  			}
+			f = (ParseTree[]) forest;
+			for (int i = 0; i < f.length; i++) {
+				f[i].passiveVoice();
+				System.out.println(f[i]);
+			}
 		}
 	}
 }
