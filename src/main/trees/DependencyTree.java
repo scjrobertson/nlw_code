@@ -28,41 +28,8 @@ import simplenlg.phrasespec.*;
  */
 public class DependencyTree extends Tree {
 
-	private Node root;
-	private final int K;
-	private LargeInteger p;
-	private LargeInteger h;
-	private ArrayList<Node> sentence;
-	private PhraseFactory factory;
-
-	/**
-	 * This nested class describes the node of a tree. Each node can have an arbitrary
-	 * number of children. The class is private to hide the implementation of the tree
-	 * from the client.
-	*/
-	private class Node {
-		private String gov_rel;
-		private String word;
-		private String lemma;
-		private String tag;
-		private ArrayList<Node> dependents = new ArrayList<Node>();
-		private int N;
-		private int M;
-
-		/* Instantiates the Node object.
-		 *
-		 * @param word The sentence level appearing in the word. If 
-		 * 		the tag is phrase level the word is null.
-		 * @param lemma The lemma of the word.
-		 * @param tag The Penn Treebank II Tags which describes
-		 * 	      the word or phrase
-		*/
-		public Node(String word, String lemma, String tag) {
-			this.word = word; 
-			this.lemma = lemma;
-			this.tag = tag;
-		}
-	}
+	protected ArrayList<Node> sentence;
+	protected PhraseFactory factory;
 
 	/**
 	 * Private constructor for ParseTree rather use 
@@ -76,7 +43,6 @@ public class DependencyTree extends Tree {
 		this.K = K;
 		growTree(dep, plantTree(words)); 
 	}
-
 
 	/**
 	 * Private constructor for ParseTree rather use 
@@ -138,11 +104,11 @@ public class DependencyTree extends Tree {
 		String[] words = pos.split("\\n");
 		Node[] seed = new Node[words.length + 1];
 		String[] tk;
-		seed[0] = new Node(null, null, "ROOT");
+		seed[0] = new Node(null, "ROOT");
 
 		for (int i = 0; i < words.length; i++) {
 			tk = words[i].split("\u00A0");
-			seed[i+1] = new Node(tk[1], tk[2], tk[3]);
+			seed[i+1] = new Node(tk[1], tk[3]);
 		}
 		this.sentence = new ArrayList<Node>(Arrays.asList(seed));
 		return seed;
@@ -165,104 +131,11 @@ public class DependencyTree extends Tree {
 			tk = dp[k].split("\u00A0");
 			i = Integer.parseInt(tk[0]);
 			j = Integer.parseInt(tk[1]);
-			node[i].dependents.add(node[j]);
+			node[i].children.add(node[j]);
 			node[j].gov_rel = tk[2];
 		}
 		this.root = node[0];
 	}
-
-	/** 
-	 * This function performs a pre-order traversal of the tree assigning each node
-	 * a consecutive number based on order of inspection. This function is recursively 
-	 * called by each node in the tree.
-	 *
-	 * <p> Complexity: O(N), where N is the number of nodes in the tree.
-	 */
-	public void preOrder () { preOrder(this.root, 0); }
-
-
-	/** 
-	 * This function performs a pre-order traversal of the tree assigning each node
-	 * a consecutive number based on order of inspection. This function is recursively 
-	 * called by each node in the tree.
-	 *
-	 * <p> Complexity: O(N), where N is the number of nodes in the tree.
-	 *
-	 * @param node The current node during traversal.
-	 * @param j The number assigned to the previous node.
-	 * @return The current node number, based onorder of inspection.
-	 */
-	private int preOrder (Node node, int j) {
-		if (node == null) return j;
-		node.N = j++;
-		for (Node n : node.dependents) j = preOrder(n, j);
-		return j;
-	}
-
-
-	/** 
-	 * Generate the binary string of the parse tree as described by Atallah et. al (2001).
-	 *
-	 * <p> Complexity: O(NM), where N is the number of node is the tree and M is the number 
-	 * of bits in (p-1)'s binary representation, typically 64.
-	 *
-	 *@return The binary string.
-	 */
-	public String getBinaryString () {
-		this.preOrder();
-		return getBinaryString(this.root, new StringBuilder()).toString();
-	}
-
-	/**
-	 * Generate the binary string of the parse tree.This function is called recursively
-	 * by every node in the tree.This is a post-order travesal of the tree assigning 
-	 * each node a bit based on whether it is a quadratic residue or not.
-	 *
-	 * <p> Complexity: O(NM), where N is the number of node is the tree and M is the number 
-	 * of bits in (p-1)'s binary representation, typically 64.
-	 *
-	 * @param node The current node during traversal
-	 * @param sb StringBuilder constructing the binary string.
-	 * @return A StringBuilder of the binaryString.
-	 */
-	private StringBuilder getBinaryString (Node node, StringBuilder sb) {
-		if (node == null) return sb;
-		for (Node n : node.dependents) sb = getBinaryString(n, sb);
-		if (TonelliShanks.isQuadraticResidue(this.h.add(node.N), this.p)) sb.append("1");
-		else sb.append("0");
-		return sb;
-	}
-
-
-	/** 
-	 * This function performs a post-order traversal of the tree assigning each node
-	 * a consecutive number based on order of inspection. This function is recursively 
-	 * called by each node in the tree.
-	 *
-	 * Complexity: O(N), where N is the number of nodes in the tree.
-	 */
-	public void postOrder () { postOrder(this.root, 0); }
-
-
-	/** 
-	 * This function performs a post-order traversal of the tree assigning each node
-	 * a consecutive number based on order of inspection. This function is recursively 
-	 * called by each node in the tree.
-	 *
-	 * <p> Complexity: O(N), where N is the number of nodes in the tree.
-	 *
-	 * @param node The current node during traversal.
-	 * @param j The number assigned to the previous node.
-	 * @return The current node number based on order of inspection.
-	 */
-	private int postOrder (Node node, int j) {
-		if (node == null) return j;
-		for (Node n : node.dependents) j = postOrder(n, j);
-		node.N = j++;
-		return j;
-	}
-
-
 
 	/** 
 	 * Recreate the original sentence described by the tree.
@@ -275,33 +148,6 @@ public class DependencyTree extends Tree {
 		StringBuilder sb = new StringBuilder();
 		for (Node n : this.sentence) if (n.word != null) sb.append(n.word + " ");
 		return sb.toString();
-	}
-
-
-	/** 
-	 * Recreate the original sentence described by the tree. 
-	 *
-	 * <p> Complexity: O(N), where N is the number of nodes in the tree.
-	 * 
-	 * @return The sentence desribed by the parse tree.
-	 */
-	public String generateSentence() {
-		NLGElement p = this.factory.getClause();
-		generateSentence(this.root.dependents.get(0), p);
-		return this.factory.realiseSentence(p);
-	}
-
-	/** 
-	 * Recreate the original sentence described by the tree. This function is recursively 
-	 * called by each node in the tree.
-	 *
-	 * <p> Complexity: O(N), where N is the number of nodes in the tree.
-	 */
-	private void generateSentence (Node node, NLGElement p) {
-		if (node == null) return;
-		this.factory.applyDependency((SPhraseSpec) p, node.lemma, node.tag, node.gov_rel);
-		for (Node n : node.dependents) generateSentence(n, p);
-		return;
 	}
 
 	/**
@@ -339,7 +185,7 @@ public class DependencyTree extends Tree {
 		j++;
 		if (node.word == null) sb.append(node.tag + "\n");
 		else sb.append(node.gov_rel + " => " + node.word + " (" + node.tag + ")\n");
-		for(Node n : node.dependents) sb = sketchTree(n, sb, j);
+		for(Node n : node.children) sb = sketchTree(n, sb, j);
 		return sb;
 	}
 

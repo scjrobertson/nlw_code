@@ -28,34 +28,9 @@ import java.security.MessageDigest;
  */
 public class ParseTree extends Tree {
 
-	private Node root;
-	private HashSet<String> set = POSTags.getTags(); 
-	private String sentence, binaryString;
-	private LargeInteger p, h;
-	private int M;
+	protected HashSet<String> set = POSTags.getTags(); 
+	protected String sentence;
 
-	/**
-	 * This nested class describes the node of a tree. Each node can have an arbitrary
-	 * number of children. The class is private to hide the implementation of the tree
-	 * from the client.
-	*/
-	private class Node {
-		private String tag, word;
-		private ArrayList<Node> children = new ArrayList<Node> ();
-		private int N;
-
-		/* Instantiates the Node object.
-		 *
-		 * @param tag The Penn Treebank II Tags which describes
-		 * 	      the word or phrase
-		 * @param word The sentence level appearing in the word. If 
-		 * 		the tag is phrase level the word is null.
-		*/
-		public Node(String tag, String word) {
-			this.tag = tag; this.word = word;
-		}
-	}
-	
 	/**
 	 * Private constructor for ParseTree rather use 
 	 * static factory method {@link getInstance()}.
@@ -73,12 +48,12 @@ public class ParseTree extends Tree {
 	 * @param sExp The s-expression describing the parse tree.
 	 * @param p A BigInteger representation of a 20 digit prime.
 	 * @param h The truncated hash of p.
-	 * @param M The sentence sequence index.
+	 * @param K The sentence sequence index.
 	 */
-	private ParseTree (String sExp, LargeInteger p, LargeInteger h, int M) { 
+	private ParseTree (String sExp, LargeInteger p, LargeInteger h, int K) { 
 		this.p = p;
 		this.h = h;
-		this.M = M;
+		this.K = K;
 		growTree(sExp); 
 	}
 
@@ -98,11 +73,11 @@ public class ParseTree extends Tree {
 	 * @param sExp The s-expression describing the parse tree.
 	 * @param p A BigInteger representation of a 20 digit prime.
 	 * @param h The truncated hash of p.
-	 * @param M The sentence sequence index.
+	 * @param K The sentence sequence index.
 	 * @return A ParseTree object.
 	 */
-	public static ParseTree getInstance(String sExp, LargeInteger p, LargeInteger h, int M) {
-		return new ParseTree(sExp, p, h, M);
+	public static ParseTree getInstance(String sExp, LargeInteger p, LargeInteger h, int K) {
+		return new ParseTree(sExp, p, h, K);
 	}
 
 	/**
@@ -130,96 +105,6 @@ public class ParseTree extends Tree {
 			}	
 		}
 	}
-
-	/** 
-	 * This function performs a pre-order traversal of the tree assigning each node
-	 * a consecutive number based on order of inspection. 	
-	 *
-	 * <p> Complexity: O(N), where N is the number of nodes in the tree.
-	 */
-	public void preOrder () { preOrder(this.root, 0); }
-
-
-	/** 
-	 * This function performs a pre-order traversal of the tree assigning each node
-	 * a consecutive number based on order of inspection. This function is recursively 
-	 * called by each node in the tree.
-	 *
-	 * <p> Complexity: O(N), where N is the number of nodes in the tree.
-	 *
-	 * @param node The current node during traversal.
-	 * @param j The number assigned to the previous node.
-	 * @return The current node number, based onorder of inspection.
-	 */
-	private int preOrder (Node node, int j) {
-		if (node == null) return j;
-		node.N = j++;
-		for (Node n : node.children) j = preOrder(n, j);
-		return j;
-	}
-
-
-	/** 
-	 * This function performs a post-order traversal of the tree assigning each node
-	 * a consecutive number based on order of inspection. This function is recursively 
-	 * called by each node in the tree.
-	 *
-	 * Complexity: O(N), where N is the number of nodes in the tree.
-	 */
-	public void postOrder () { postOrder(this.root, 0); }
-
-
-	/** 
-	 * This function performs a post-order traversal of the tree assigning each node
-	 * a consecutive number based on order of inspection. This function is recursively 
-	 * called by each node in the tree.
-	 *
-	 * <p> Complexity: O(N), where N is the number of nodes in the tree.
-	 *
-	 * @param node The current node during traversal.
-	 * @param j The number assigned to the previous node.
-	 * @return The current node number based on order of inspection.
-	 */
-	private int postOrder (Node node, int j) {
-		if (node == null) return j;
-		for (Node n : node.children) j = postOrder(n, j);
-		node.N = j++;
-		return j;
-	}
-
-	/** 
-	 * Generate the binary string of the parse tree as described by Atallah et. al (2001).
-	 *
-	 * <p> Complexity: O(NM), where N is the number of node is the tree and M is 
-	 * the number of bits in p-1 binary representation, typically 64.
-	 *
-	 *@return The binary string.
-	 */
-	public String getBinaryString () {
-		preOrder();
-		return getBinaryString(this.root, new StringBuilder()).toString();
-	}
-
-	/**
-	 * Generate the binary string of the parse tree.This function is called recursively
-	 * by every node in the tree.This is a post-order travesal of the tree assigning 
-	 * each node a bit based on whether it is a quadratic residue or not.
-	 *
-	 * <p> Complexity: O(NM), where N is the number of node is the tree and M is 
-	 * the number of bits in p-1 binary representation, typically 64.
-	 *
-	 * @param node The current node during traversal
-	 * @param sb StringBuilder constructing the binary string.
-	 * @return A StringBuilder of the binaryString.
-	 */
-	private StringBuilder getBinaryString (Node node, StringBuilder sb) {
-		if (node == null) return sb;
-		for (Node n : node.children) sb = getBinaryString(n, sb);
-		if (TonelliShanks.isQuadraticResidue(this.h.add(node.N), this.p)) sb.append("1");
-		else sb.append("0");
-		return sb;
-	}
-
 
 	/** 
 	 * Recreate the original sentence described by the tree. This function is recursively 
@@ -257,13 +142,6 @@ public class ParseTree extends Tree {
 		for (Node n : node.children) sb = getSentence(n, sb);
 		return sb;
 	}
-
-	/**
-	 * Generate the sentence described by the parse tree.
-	 *
-	 * @return The sentence described by the parse tree.
-	 */
-	public String generateSentence () { return null;  }
 
 	/**
 	 * Create an easily readable representation of the tree. This a relatively expensive 
@@ -304,34 +182,6 @@ public class ParseTree extends Tree {
 		for (Node n : node.children) sb = sketchTree(n, sb, j);
 		return sb;
 	}
-
-	/**
-	 * Changes the appropriate sentence from its active voice to its passive voice.
-	 */
-	 void passiveVoice () {
-		Node root, subj, obj, verb, pntr, pp;
-		
-		root = this.root.children.get(0);
-		subj = root.children.get(0);
-		pntr  = root.children.get(1);
-		obj = pntr.children.get(1);
-
-		pntr.children.add(0, new Node ("VBP", "was"));
-		verb = pntr.children.get(1);
-		verb.tag = "VBN";
-
-		pp = new Node ("PP", null);
-		pp.children.add(new Node("IN", "by"));
-		pp.children.add(subj);
-
-		pntr.children.get(1).children.add(pp);
-		
-		root.children.remove(subj);
-		root.children.add(0, obj);
-		pntr.children.remove(obj);
-
-	}
-
 
 	/**
 	 * A small example of the output. 
