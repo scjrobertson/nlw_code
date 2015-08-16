@@ -28,6 +28,9 @@ To parse an input body of text using the Stanford coreNLP, compile and run **cor
 found in **nlw_code/src/main/trees**, it is compiled as follows:
 
      chmod a+x core_stanford.txt
+
+The script can now be run as follows, an input body of text must always be placed in **src/main/output**:
+
      ./core_stanford.sh ../output/text.txt
 
 This will create three output files, in the folder **src/main/output/text**, for each input file:
