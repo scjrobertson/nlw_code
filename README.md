@@ -30,7 +30,7 @@ found in **nlw_code/src/main/trees**, it is compiled as follows:
      chmod a+x core_stanford.txt
      ./core_stanford.sh ../output/text.txt
 
-This will create three output files for each input file:
+This will create three output files, in the folder **src/main/output/text**, for each input file:
 
 * text_lemma.txt - The POS tags and lemmas of the sentences.
 * text_dep.txt - The basic dependencies describing the text.
