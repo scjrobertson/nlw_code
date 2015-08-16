@@ -47,15 +47,15 @@ The current implementation only re-parses the Stanford coreNLP output and
 allows the binary strings of each sentence to be generated. The Java files can be compiled
 from the root folder **nlw_code/** as follows:
 
-    javac src/main/trees/ReadFile.java
+    javac -cp .:src/main/resources/simplenlg-v4.4.2.jar src/main/trees/ReadFile.java
 
 The file is then run using one of two flags. For dependency output, the **-d** flag is used:
 
-    java src.main.trees.ReadFile -d src/main/output/text/text_dep.txt src/main/output/text/text_lemma.txt
+    java -cp .:src/main/resources/simplenlg-v4.4.2.jar src.main.trees.ReadFile -d src/main/output/text/text_dep.txt src/main/output/text/text_lemma.txt
 
 For syntactic parse trees the **-p** flag is used:
 
-    java src.main.trees.ReadFile -p src/main/output/text/text_parse.txt
+    java -cp .:src/main/resources/simplenlg-v4.4.2.jar src.main.trees.ReadFile -p src/main/output/text/text_parse.txt
 
 The compilation instruction for each individual Java file is included in the comments. The original code makes use of **javadoc** comments and the API can be extracted from the root folder **nlw_code/** as follows:
 
