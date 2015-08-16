@@ -11,14 +11,22 @@ options="tokenize,ssplit,pos,lemma,ner,parse"; #"dcoref";
 
 input=$1;
 
-IFS='.' read -a myarray <<< "$input"
-lemma="${myarray[0]}""_lemma.txt";
-parse="${myarray[0]}""_parse.txt";
-dep="${myarray[0]}""_dep.txt";
-xml="${myarray[0]}"".xml";
+IFS='/' read -a path <<< "$input"
+IFS="." read -a myarray <<< "${path[2]}"
+file=${myarray[0]}.${myarray[1]};
+root=${myarray[0]};
+path=${path[0]}/${path[1]}/$root;
+lemma="$root""_lemma.txt";
+parse="$root""_parse.txt";
+dep="$root""_dep.txt";
+xml="$root"".xml";
+
+echo $path;
+mkdir -p $path;
 
 java -Xmx2g -cp .:$core:$models:$xom:$joda:$jollyday:$ejml $class -annotators $options -file $input;
-xmlstarlet tr lemma.xsl $input.xml > $lemma;
-xmlstarlet tr parse.xsl $input.xml > $parse;
-xmlstarlet tr dep.xsl $input.xml > $dep;
-mv $input.xml $xml;
+mv $file.xml $path;
+xmlstarlet tr lemma.xsl $path/$file.xml > $path/$lemma;
+xmlstarlet tr parse.xsl $path/$file.xml > $path/$parse;
+xmlstarlet tr dep.xsl $path/$file.xml > $path/$dep;
+mv $path/$file.xml $path/$xml;
