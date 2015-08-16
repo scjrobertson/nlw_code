@@ -28,7 +28,7 @@ To parse an input body of text using the Stanford coreNLP, compile and run **cor
 found in **nlw_code/src/main/trees**, it is compiled as follows:
 
      chmod a+x core_stanford.txt
-     ./core_stanford.sh text.txt
+     ./core_stanford.sh ../output/text.txt
 
 This will create three output files for each input file:
 
@@ -36,7 +36,7 @@ This will create three output files for each input file:
 * text_dep.txt - The basic dependencies describing the text.
 * text_parse.txt - The syntactic parse trees' s-expressions.
 
-Two bodies of text **moby.txt** and **sense.txt** have been included in **nlw_code/src/main/trees/** to run as examples. Any body of plain text
+Two bodies of text **moby.txt** and **sense.txt** have been included in **nlw_code/src/main/output/** to run as examples. Any body of plain text
 is suitable for parsing.
 
 ### Output parse trees and binary strings ###
@@ -48,11 +48,11 @@ from the root folder **nlw_code/** as follows:
 
 The file is then run using one of two flags. For dependency output, the **-d** flag is used:
 
-    java src.main.trees.ReadFile -d src/main/trees/text_dep.txt src/main/trees/text_lemma.txt
+    java src.main.trees.ReadFile -d src/main/output/text/text_dep.txt src/main/output/text/text_lemma.txt
 
 For syntactic parse trees the **-p** flag is used:
 
-    java src.main.trees.ReadFile -p src/main/trees/text_parse.txt
+    java src.main.trees.ReadFile -p src/main/output/text/text_parse.txt
 
 The compilation instruction for each individual Java file is included in the comments. The original code makes use of **javadoc** comments and the API can be extracted from the root folder **nlw_code/** as follows:
 
