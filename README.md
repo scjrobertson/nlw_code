@@ -4,7 +4,7 @@
 
 * Java code for the natural language watermarking approach described by Atallah et al. (2001) .
 
-### How do I get set up? ###
+## How do I get set up? ##
 
 * A (preferably Debian-based) Linux distribution, this setup requires running bash scripts.
 * JDK and JRE 8 (7 may work as well)
@@ -57,6 +57,8 @@ For syntactic parse trees the **-p** flag is used:
 
     java -cp .:src/main/resources/simplenlg-v4.4.2.jar src.main.trees.ReadFile -p src/main/output/text/text_parse.txt
 
+##API##
+
 The compilation instruction for each individual Java file is included in the comments. The original code makes use of **javadoc** comments and the API can be extracted from the root folder **nlw_code/** as follows:
 
     mkdir documentation
@@ -64,7 +66,7 @@ The compilation instruction for each individual Java file is included in the com
 
 **Warning**: There may be some errors in the javadoc comments causing the extraction to fail, src.main.trees has some guarantee of working. The API can now be viewed comfortably in a browser rather than sifting through code.
 
-### Who do I talk to? ###
+## Who do I talk to? ##
 
 SCJ Robertson
 
