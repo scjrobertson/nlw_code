@@ -29,7 +29,7 @@ found in **nlw_code/src/main/trees**, it is compiled as follows:
 
      chmod a+x core_stanford.txt
 
-The script can now be run as follows, an input body of text must always be placed in **src/main/output**:
+The script can now be run as follows, an input body of text must always be placed in **nlw_code/src/main/output**:
 
      ./core_stanford.sh ../output/text.txt
 
