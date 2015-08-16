@@ -10,7 +10,7 @@
 * JDK and JRE 8 (7 may work as well)
 * Download **Stanford coreNLP** and **simpleNLG-v.4.4.2**. A bash script, using **wget** and the **Ubuntu** archive manager **file-roller**, is placed in the **nlw_code/src/main/resources** folder
 which will automatically download them upon execution. 
-To compile this, run the following commands:
+To compile and run this, use the following commands:
 
         chmod a+x download.sh
         ./download.sh
