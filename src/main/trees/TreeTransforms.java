@@ -8,6 +8,7 @@
  *************************************************************************/
 package src.main.trees;
 import src.main.utils.POSTags;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -112,6 +113,19 @@ public class TreeTransforms {
 
 
 	/**
+	 * Add a node's children to another node. 
+	 *
+	 * <p> Complexity: O(lgN) where N is the number of nodes in the tree.
+	 *
+	 * @param node The root of this tree.
+	 * @param tags The path to be followed. Described by POS tags.
+	 */
+	static void addSubtree (Node root, ArrayList<Node> children, String tags) {
+		Node parent = findSubtree(root, tags);
+		for (Node n : children) parent.children.add(n); 
+	}
+
+	/**
 	 * Removes the full stop from a parse tree.
 	 *
 	 * <p> Complexity: Constant
@@ -142,8 +156,8 @@ public class TreeTransforms {
 		addSubtree( root, removeSubtree(root, "S VP NP"), "S", 0);	
 		addSubtree( v, new Node("VBP", "was"), "VP");
 		addSubtree( v, removeSubtree(root, "S VP"), "VP");
-		addSubtree( v, pp.children.get(0), "VP VP");
-		addSubtree( root, v.children.get(0), "S");
+		addSubtree( v, pp.children, "VP VP");
+		addSubtree( root, v.children, "S");
 	}
 
 
@@ -166,12 +180,63 @@ public class TreeTransforms {
 		addSubtree(root, verb, "S");
 	}
 
-	public void preAdjunct (Node noot) {
-		
+
+	/**
+	 * Adds the abverbial phrase often beginning of a simple subj-vrb-obj sentence.
+	 *
+	 * <p> Complexity: Constant
+	 *
+	 * @param node The root of the tree.
+	 */
+	static void preAdjunct (Node root) {
+		Node adj = ParseTree.getInstance("( ADVP ( RB Often )  )").root;
+		addSubtree(root, adj, "S", 0);
 	}
 
-	public void postAdjunct (Node root) {
 
+	/**
+	 * Adds the abverbial phrase often end of a simple subj-vrb-obj sentence.
+	 *
+	 * <p> Complexity: Constant
+	 *
+	 * @param node The root of the tree.
+	 */
+	static void postAdjunct (Node root) {
+		Node adj = ParseTree.getInstance("ADVP ( RB Often )  )").root;
+		addSubtree(root, adj, "S");
 	}
+
+
+	/**
+	 * Removes the meaning-modifying transform adjunct transform.
+	 *
+	 * <p> Complexity: Constant
+	 *
+	 * @param node The root of the tree.
+	 */
+	static void removeAdjunct (Node root) {
+		removeSubtree(root, "S ADVP");
+	}
+
+	static void cleft (Node root) {
+		removeFullStop(root);
+		Node sbar = ParseTree.getInstance("( ROOT ( SBAR ( IN that ) ( S  ) ) )").root;
+		Node cleft = ParseTree.getInstance("( ROOT ( NP ( PRP It ) ) ( VP ( VBP was ) ) )").root;
+		addSubtree(cleft, removeSubtree(root, "S VP NP"), "VP");
+		addSubtree(sbar, removeSubtree(root, "S NP"), "SBAR S");
+		addSubtree(sbar, removeSubtree(root, "S VP"), "SBAR S");
+		addSubtree(cleft, sbar.children, "VP");
+		addSubtree(root, cleft.children, "S");
+	}
+
+	static void removeCleft (Node root) {
+		Node sapling = ParseTree.getInstance("( ROOT ( S ) )").root;
+		addSubtree(sapling, removeSubtree(root, "S VP SBAR S NP"), "S");
+		addSubtree(sapling, removeSubtree(root, "S VP SBAR S VP"), "S");
+		addSubtree(sapling, removeSubtree(root, "S VP NP"), "S VP", 1);
+		System.out.println(ParseTree.sketchTree(sapling, new StringBuilder(), 0));
+	}
+
+
 
 }
