@@ -29,6 +29,11 @@ public class PhraseFactory {
 		return this.realiser.realiseSentence(e);
 	}
 
+
+	public String realiseSentence(String s) {
+		return this.realiser.realiseSentence(nlgFactory.createSentence(s));
+	}
+
 	public static void main (String[] args) {
 	}
 }

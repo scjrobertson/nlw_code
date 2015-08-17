@@ -15,11 +15,14 @@ public class RunMain {
 		PhraseFactory factory = PhraseFactory.getInstance();
 
 		if (args.length > 0) {
-			ParseTree[] parse = ReadFile.processParse(args[0], p, h);
-			DependencyTree[] dep = ReadFile.processDependency(args[1], args[2], p, h, factory);
+			ParseTree[] parse = ReadFile.processParse(args[0], p, h, factory);
+			DependencyTree[] dep = ReadFile.processDependency(args[1], args[2], p, h);
 			for (int i = 0; i < parse.length; i++) {
-				System.out.println(parse[i].getSentence() + "\n" + parse[i] + "\n" +  parse[i].getBinaryString() + "\n");
+				System.out.println(parse[i].getSentence() + "\n" + parse[i] + "\n"
+						+ dep[i] + "\n" + parse[i].getBinaryString() + "\n");
 			}
+			TreeTransforms.passiveVoice(parse[0].root);
+			System.out.println(parse[0] + "\n" + parse[0].getSentence());
 		}
 	}
 }

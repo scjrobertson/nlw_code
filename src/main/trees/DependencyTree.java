@@ -13,9 +13,6 @@ import java.util.ArrayList;
 import src.main.utils.TonelliShanks;
 import src.main.utils.LargeInteger;
 import java.util.Random;
-import src.main.nlg.PhraseFactory;
-import simplenlg.framework.*;
-import simplenlg.phrasespec.*;
 
 /**
  * This object is given both a simplified POS and dependency expressions and recreates
@@ -29,7 +26,6 @@ import simplenlg.phrasespec.*;
 public class DependencyTree extends Tree {
 
 	protected ArrayList<Node> sentence;
-	protected PhraseFactory factory;
 
 	/**
 	 * Private constructor for ParseTree rather use 
@@ -53,13 +49,11 @@ public class DependencyTree extends Tree {
 	 * @param p BigInteger representation of a 20 digit prime.
 	 * @param h the truncated hash of p
 	 * @param K The setentence index.
-	 * @param factory A phrase factory for sentence realisation.
 	 */
-	private DependencyTree(String dep, String words, LargeInteger p, LargeInteger h, int K, PhraseFactory factory) { 
+	private DependencyTree(String dep, String words, LargeInteger p, LargeInteger h, int K) { 
 		this.K = K;
 		this.p = p;
 		this.h = h;
-		this.factory = factory;
 		growTree(dep, plantTree(words)); 
 	}
 
@@ -84,11 +78,10 @@ public class DependencyTree extends Tree {
 	 * @param p BigInteger representation of a 20 digit prime.
 	 * @param h The truncated hash of p.
 	 * @param K The sentence index.
-	 * @param factory A phrase factory for sentence realisation.
 	 * @return A DependencyTree object.
 	 */
-	public static DependencyTree getInstance(String dep, String lemma, LargeInteger p, LargeInteger h, int K, PhraseFactory factory) {
-		return new DependencyTree(dep, lemma, p, h, K, factory);
+	public static DependencyTree getInstance(String dep, String lemma, LargeInteger p, LargeInteger h, int K) {
+		return new DependencyTree(dep, lemma, p, h, K);
 	}
 
 	/**
@@ -104,11 +97,11 @@ public class DependencyTree extends Tree {
 		String[] words = pos.split("\\n");
 		Node[] seed = new Node[words.length + 1];
 		String[] tk;
-		seed[0] = new Node(null, "ROOT");
+		seed[0] = new Node("ROOT", null);
 
 		for (int i = 0; i < words.length; i++) {
 			tk = words[i].split("\u00A0");
-			seed[i+1] = new Node(tk[1], tk[3]);
+			seed[i+1] = new Node(tk[3], tk[1]);
 		}
 		this.sentence = new ArrayList<Node>(Arrays.asList(seed));
 		return seed;
@@ -179,7 +172,7 @@ public class DependencyTree extends Tree {
 	 * @param j The depth of the node. Used for spacing.
 	 * @return The parse tree string under construction
 	 */
-	private StringBuilder sketchTree(Node node, StringBuilder sb, int j) {
+	StringBuilder sketchTree(Node node, StringBuilder sb, int j) {
 		if(node == null) return sb;
 		for(int i = 0; i < j; i++) sb.append("    ");
 		j++;

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 /**
  * Leaf for the Tree class. Each node can have an arbitrary
- * number of children. The class is private protected to hide the implementation of the tree
+ * number of children. The class is package private to hide the implementation of the tree
  * from the client. Not nested in Tree as this creates an ungodly mess when it comes to 
  * instantiating new Node objects.
  *
@@ -21,11 +21,11 @@ import java.util.ArrayList;
 */
 class Node {
 
-	protected ArrayList<Node> children = new ArrayList<Node> ();
-	protected int N;
-	protected String tag;
-	protected String word;
-	protected String gov_rel;
+	ArrayList<Node> children = new ArrayList<Node> ();
+	int N;
+	String tag;
+	String word;
+	String gov_rel;
 
 	/* Instantiates the Node object.
 	 *
@@ -34,8 +34,12 @@ class Node {
 	 * @param word The sentence level appearing in the word. If 
 	 * 		the tag is phrase level the word is null.
 	*/
-	protected Node (String tag, String word) {
+	Node (String tag, String word) {
 		this.tag = tag;
 		this.word = word;
+	}
+
+	@Override public String toString () {
+		return tag + ":\t" + word;
 	}
 }

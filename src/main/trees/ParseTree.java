@@ -9,6 +9,7 @@ package src.main.trees;
 import src.main.utils.POSTags;
 import src.main.utils.LargeInteger;
 import src.main.utils.TonelliShanks;
+import src.main.nlg.PhraseFactory;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Stack;
@@ -29,7 +30,7 @@ import java.security.MessageDigest;
 public class ParseTree extends Tree {
 
 	protected HashSet<String> set = POSTags.getTags(); 
-	protected String sentence;
+	protected PhraseFactory factory;
 
 	/**
 	 * Private constructor for ParseTree rather use 
@@ -50,10 +51,11 @@ public class ParseTree extends Tree {
 	 * @param h The truncated hash of p.
 	 * @param K The sentence sequence index.
 	 */
-	private ParseTree (String sExp, LargeInteger p, LargeInteger h, int K) { 
+	private ParseTree (String sExp, LargeInteger p, LargeInteger h, int K, PhraseFactory factory) { 
 		this.p = p;
 		this.h = h;
 		this.K = K;
+		this.factory = factory;
 		growTree(sExp); 
 	}
 
@@ -76,8 +78,8 @@ public class ParseTree extends Tree {
 	 * @param K The sentence sequence index.
 	 * @return A ParseTree object.
 	 */
-	public static ParseTree getInstance(String sExp, LargeInteger p, LargeInteger h, int K) {
-		return new ParseTree(sExp, p, h, K);
+	public static ParseTree getInstance(String sExp, LargeInteger p, LargeInteger h, int K, PhraseFactory factory) {
+		return new ParseTree(sExp, p, h, K, factory);
 	}
 
 	/**
@@ -115,8 +117,8 @@ public class ParseTree extends Tree {
 	 * @return The sentence desribed by the parse tree.
 	 */
 	public String getSentence () {
-		if (sentence == null) sentence = getSentence(this.root, new StringBuilder()).toString();
-		return sentence;
+		String s = getSentence(this.root, new StringBuilder()).toString();
+		return factory.realiseSentence(s);
 	}
 
 	/** 
@@ -173,7 +175,7 @@ public class ParseTree extends Tree {
 	 * @param j The depth of the node. Used for spacing.
 	 * @return The parse tree string under construction
 	 */
-	private StringBuilder sketchTree (Node node, StringBuilder sb, int j) {
+	static StringBuilder sketchTree (Node node, StringBuilder sb, int j) {
 		if (node == null) return sb;
 		for (int i = 0; i < j; i++) sb.append("  ");
 		j++;
