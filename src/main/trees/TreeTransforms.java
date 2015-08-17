@@ -134,10 +134,9 @@ public class TreeTransforms {
 	 * @param node The root of the tree.
 	 */
 	static void passiveVoice (Node root) {
+		removeFullStop(root);
 		Node pp = ParseTree.getInstance("( ROOT ( PP ( IN by ) ) )").root;
 		Node v = ParseTree.getInstance("( ROOT ( VP ) )").root;
-
-		removeFullStop(root);
 
 		addSubtree( pp, removeSubtree(root, "S NP"), "PP");
 		addSubtree( root, removeSubtree(root, "S VP NP"), "S", 0);	
@@ -158,18 +157,21 @@ public class TreeTransforms {
 	 *
 	 * @param node The root of the tree.
 	 */
-	static void passiveVoice (Node root) {
-		Node pp = ParseTree.getInstance("( ROOT ( PP ( IN by ) ) )").root;
-		Node v = ParseTree.getInstance("( ROOT ( VP ) )").root;
+	static void activeVoice (Node root) {
+		Node pp = removeSubtree(root, "S VP VP PP");
+		Node verb = removeSubtree( removeSubtree(root, "S VP"), "VP VP");
+		
+		addSubtree(verb, removeSubtree(root, "S NP"), "VP");
+		addSubtree(root, removeSubtree(pp, "NP"), "S");
+		addSubtree(root, verb, "S");
+	}
 
-		removeFullStop(root);
+	public void preAdjunct (Node noot) {
+		
+	}
 
-		addSubtree( pp, removeSubtree(root, "S NP"), "PP");
-		addSubtree( root, removeSubtree(root, "S VP NP"), "S", 0);	
-		addSubtree( v, new Node("VBP", "was"), "VP");
-		addSubtree( v, removeSubtree(root, "S VP"), "VP");
-		addSubtree( v, pp.children.get(0), "VP VP");
-		addSubtree( root, v.children.get(0), "S");
+	public void postAdjunct (Node root) {
+
 	}
 
 }

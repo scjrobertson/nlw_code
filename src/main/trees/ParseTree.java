@@ -118,7 +118,7 @@ public class ParseTree extends Tree {
 	 */
 	public String getSentence () {
 		String s = getSentence(this.root, new StringBuilder()).toString();
-		return factory.realiseSentence(s);
+		return s;
 	}
 
 	/** 

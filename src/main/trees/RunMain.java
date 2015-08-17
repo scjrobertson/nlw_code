@@ -23,6 +23,8 @@ public class RunMain {
 			}
 			TreeTransforms.passiveVoice(parse[0].root);
 			System.out.println(parse[0] + "\n" + parse[0].getSentence());
+			TreeTransforms.activeVoice(parse[0].root);
+			System.out.println(parse[0] + "\n" + parse[0].getSentence());
 		}
 	}
 }
