@@ -61,7 +61,7 @@ public class TreeTransforms {
 				return findSubtree(n, tags, ++i);
 			} 
 		}
-		return node;
+		return null;
 	}
 
 
@@ -218,6 +218,16 @@ public class TreeTransforms {
 		removeSubtree(root, "S ADVP");
 	}
 
+
+	/**
+	 * Past tense it-cleft, changes the subject of a simple sentence to its
+	 * focus.
+	 *
+	 * <p> Complexity: O(2M + 10lgN) Where N is the number of nodes in the tree.
+	 * M <= N.
+	 *
+	 * @param node The root of the tree.
+	 */
 	static void cleft (Node root) {
 		removeFullStop(root);
 		Node sbar = ParseTree.getInstance("( ROOT ( SBAR ( IN that ) ( S  ) ) )").root;
@@ -229,6 +239,15 @@ public class TreeTransforms {
 		addSubtree(root, cleft.children, "S");
 	}
 
+
+	/**
+	 * Removes past tense it cleft, complex sentence is reverted to a simple sentence.
+	 *
+	 * <p> Complexity: O(2M + 10lgN) Where N is the number of nodes in the tree.
+	 * M <= N.
+	 *
+	 * @param node The root of the tree.
+	 */
 	static void removeCleft (Node root) {
 		Node sapling = ParseTree.getInstance("( ROOT ( S ) )").root;
 		addSubtree(sapling, removeSubtree(root, "S VP SBAR S NP"), "S");
@@ -237,6 +256,11 @@ public class TreeTransforms {
 		System.out.println(ParseTree.sketchTree(sapling, new StringBuilder(), 0));
 	}
 
+	static void topicalization (Node root) {
+	}
+
+	static void removeTopicalization (Node root) {
+	}
 
 
 }

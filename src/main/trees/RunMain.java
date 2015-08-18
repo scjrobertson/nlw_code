@@ -21,9 +21,16 @@ public class RunMain {
 				System.out.println(parse[i].getSentence() + "\n" + parse[i] + "\n"
 						+ dep[i] + "\n" + parse[i].getBinaryString() + "\n");
 			}
-			TreeTransforms.cleft(parse[0].root);
+			/*
+			TreeTransforms.topicalization(parse[0].root);
 			System.out.println(parse[0] + "\n" + parse[0].getSentence() + "\n" + parse[0].getBinaryString() +"\n");
-			TreeTransforms.removeCleft(parse[0].root);
+			TreeTransforms.removeTopicalization(parse[0].root);
+			System.out.println(parse[0] + "\n" + parse[0].getSentence() + "\n" + parse[0].getBinaryString() +"\n");
+			*/
+			for (int i = 0; i < parse.length; i += 2) {
+				TreeTransforms.topicalization(parse[i].root);
+				System.out.println(parse[i].getSentence()  + "\n");
+			}
 		}
 	}
 }
