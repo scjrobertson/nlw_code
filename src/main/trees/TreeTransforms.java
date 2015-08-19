@@ -29,6 +29,40 @@ public class TreeTransforms {
 	 */
 	private TreeTransforms() {}
 
+
+	/**
+	 * Determine whether a dependency tree has a particular feature.
+	 *
+	 * <p> Complexity: O(lgN) where N is the number of nodes in the tree.
+	 *
+	 * @param node The root of this tree.
+	 * @param tags The path to be followed. Described by POS and dependency tags.
+	 * @return Whether the tree contains the desired feature.
+	 */
+	static boolean hasFeature (Node node, String tags) {
+		return hasFeature(node, tags.split(" "), false, 0);
+	}
+
+	/**
+	 * Determine whether a dependency tree has a particular feature.
+	 *
+	 * <p> Complexity: O(lgN) where N is the number of nodes in the tree.
+	 *
+	 * @param node The root of this tree.
+	 * @param tags The path to be followed. Described by depedency tags.
+	 * @return Whether the tree contains the desired feature.
+	 */
+	private static boolean hasFeature (Node node, String [] tags, boolean st, int i) {
+		for (Node n : node.children) {
+			boolean result;
+			if (i == tags.length) return st;
+			if (set.contains(tags[i])) result = n.tag.equals(tags[i]);
+			else result = n.gov_rel.equals(tags[i]);
+			if (result) return (result && hasFeature(n, tags, result, ++i));
+		}
+		return st;
+	}
+
 	/**
 	 * Find a particular node in a tree by specifying its path.
 	 *
@@ -39,8 +73,7 @@ public class TreeTransforms {
 	 * @return The root of the subtree.
 	 */
 	static Node findSubtree (Node node, String tags) {
-		Node n =  findSubtree(node, tags.split(" "), 0);
-		return n;
+		return findSubtree(node, tags.split(" "), 0);
 	}
 
 
@@ -61,7 +94,7 @@ public class TreeTransforms {
 				return findSubtree(n, tags, ++i);
 			} 
 		}
-		return null;
+		return node;
 	}
 
 
