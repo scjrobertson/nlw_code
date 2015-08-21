@@ -6,7 +6,7 @@
  *  Reads in files and recreates the pare of dependency trees.
  *************************************************************************/
 package src.main.trees;
-import src.main.utils.HashAlgorithms;
+import src.main.utils.HashAlgorithm;
 import src.main.utils.LargeInteger;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -56,12 +56,13 @@ public class ReadFile {
 	 * @param factory A phrase factory for sentence realisation.
 	 * @return An array of ParseTree objects.
 	 */
-	public static ParseTree[] processParse (String parse, LargeInteger p, LargeInteger h, PhraseFactory factory) {
+	public static ParseTree[] processParse (String parse, LargeInteger p, LargeInteger h,
+			HashAlgorithm hash) {
 		String[] sexp = fileToString(parse).split("\n\n");
 		ParseTree[] forest = new ParseTree[sexp.length];
 		for (int i = 0; i < sexp.length; i++) {
 			sexp[i] = sexp[i].replace("(", " ( ").replace(")", " ) ");	
-			forest[i] = ParseTree.getInstance(sexp[i], p, h, i, factory);
+			forest[i] = ParseTree.getInstance(sexp[i], p, h, i, hash);
 		}
 		return forest;
 	}
@@ -77,13 +78,14 @@ public class ReadFile {
 	 * @param h The hash of the prime p
 	 * @return An array of DependencyTree objects.
 	 */
-	public static DependencyTree[] processDependency (String dep, String pos, LargeInteger p, LargeInteger h) {
+	public static DependencyTree[] processDependency (String dep, String pos, 
+			LargeInteger p, LargeInteger h, HashAlgorithm hash) {
 		String[] deps = fileToString(dep).split("\n\n");
 		String[] tags = fileToString(pos).split("\n\n");
 		DependencyTree[] forest = new DependencyTree[tags.length];
 		for (int i = 0; i < tags.length; i++) {
 			//System.out.println(i);
-			forest[i] = DependencyTree.getInstance(deps[i], tags[i], p, h, i);
+			forest[i] = DependencyTree.getInstance(deps[i], tags[i], p, h, i, hash);
 		}
 		return forest;
 	}
@@ -95,15 +97,15 @@ public class ReadFile {
 	 * @param args Standard input - flags and file names.
 	 */
 	public static void main (String [] args) {
+		HashAlgorithm sha = HashAlgorithm.getInstance("SHA-1", 8);
 		LargeInteger p = LargeInteger.probablePrime(64, new Random());
-		LargeInteger h = HashAlgorithms.getHash("SHA-1", p.toString(), 8);
-		PhraseFactory factory = PhraseFactory.getInstance();
+		LargeInteger h = sha.hashString(p.toString());
 		System.out.println(p + "\t" + h + "\n");
 
 		Tree[] forest = null;
 		if (args.length > 0) {
-			if (args[0].equals("-p")) forest = processParse(args[1], p, h, factory);
-			if (args[0].equals("-d")) forest = processDependency(args[1], args[2], p, h);
+			if (args[0].equals("-p")) forest = processParse(args[1], p, h, sha);
+			if (args[0].equals("-d")) forest = processDependency(args[1], args[2], p, h, sha);
 			for (int i = 0; i < forest.length; i++) {  
 				System.out.println(forest[i].getSentence() + "\n" + forest[i] + "\n" + forest[i].getBinaryString() + "\n");
   			}

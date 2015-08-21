@@ -10,6 +10,7 @@ package src.main.trees;
 import java.util.ArrayList;
 import src.main.utils.LargeInteger;
 import src.main.utils.TonelliShanks;
+import src.main.utils.HashAlgorithm;
 
 /**
  *  Abstract tree structure.This superclass of all other tree classes
@@ -23,6 +24,8 @@ abstract class Tree {
 	protected Node root;
 	protected LargeInteger p, h;
 	protected int K;
+	protected HashAlgorithm hash;
+	protected LargeInteger rank;
 
 	/**
 	 * Procted method, returns the tree.
@@ -43,6 +46,29 @@ abstract class Tree {
 	public String getBinaryString () {
 		this.preOrder();
 		return getBinaryString(this.root, new StringBuilder()).toString();
+	}
+
+	/**
+	 * Determine the rank of a parse tree, R = H(B) XOR H(p). Here B is the binary string of
+	 * a parse tree.
+	 *
+	 * @return The LargeInteger representation of R.
+	 */
+	public void assignRank () {
+		LargeInteger s = LargeInteger.getInstance(this.getBinaryString(), 2);
+		LargeInteger b = this.hash.hashString(s.toString());
+		this.rank =  b.xor(this.h);
+	}
+
+
+	/**
+	 * Get the rank of a parse tree, R = H(B) XOR H(p). Here B is the binary string of
+	 * a parse tree.
+	 *
+	 * @return The LargeInteger representation of R.
+	 */
+	public LargeInteger getRank () {
+		return this.rank;
 	}
 
 	/**

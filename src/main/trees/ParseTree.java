@@ -9,6 +9,7 @@ package src.main.trees;
 import src.main.utils.POSTags;
 import src.main.utils.LargeInteger;
 import src.main.utils.TonelliShanks;
+import src.main.utils.HashAlgorithm;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Stack;
@@ -49,13 +50,16 @@ public class ParseTree extends Tree {
 	 * @param p A BigInteger representation of a 20 digit prime.
 	 * @param h The truncated hash of p.
 	 * @param K The sentence sequence index.
+	 * @param hash The hash algorithm.
 	 */
-	private ParseTree (String sExp, LargeInteger p, LargeInteger h, int K, PhraseFactory factory) { 
+	private ParseTree (String sExp, LargeInteger p, LargeInteger h, int K, 
+			HashAlgorithm hash) { 
 		this.p = p;
 		this.h = h;
 		this.K = K;
-		this.factory = factory;
+		this.hash = hash;
 		growTree(sExp); 
+		assignRank();
 	}
 
 	/**
@@ -75,10 +79,12 @@ public class ParseTree extends Tree {
 	 * @param p A BigInteger representation of a 20 digit prime.
 	 * @param h The truncated hash of p.
 	 * @param K The sentence sequence index.
+	 * @param hash The hash algorithm.
 	 * @return A ParseTree object.
 	 */
-	public static ParseTree getInstance(String sExp, LargeInteger p, LargeInteger h, int K, PhraseFactory factory) {
-		return new ParseTree(sExp, p, h, K, factory);
+	public static ParseTree getInstance(String sExp, LargeInteger p, LargeInteger h, 
+			int K, HashAlgorithm hash) {
+		return new ParseTree(sExp, p, h, K, hash);
 	}
 
 	/**
@@ -155,7 +161,6 @@ public class ParseTree extends Tree {
 	@Override public String toString() {
 		return sketchTree(this.root, new StringBuilder(), 0).toString();
 	}
-
 
 	/**
 	 * Create an easily readable representation of the tree. This function is recursively 

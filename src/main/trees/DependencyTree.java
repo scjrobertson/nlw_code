@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import src.main.utils.TonelliShanks;
 import src.main.utils.LargeInteger;
+import src.main.utils.HashAlgorithm;
 import java.util.Random;
 
 /**
@@ -35,8 +36,7 @@ public class DependencyTree extends Tree {
 	 * @param words The POS tags and lemmas of the sentence.
 	 * @param K The setentence index.
 	 */
-	private DependencyTree(String dep, String words, int K) { 
-		this.K = K;
+	private DependencyTree(String dep, String words) { 
 		growTree(dep, plantTree(words)); 
 	}
 
@@ -49,11 +49,14 @@ public class DependencyTree extends Tree {
 	 * @param p BigInteger representation of a 20 digit prime.
 	 * @param h the truncated hash of p
 	 * @param K The setentence index.
+	 * @param hash The hash algorithm.
 	 */
-	private DependencyTree(String dep, String words, LargeInteger p, LargeInteger h, int K) { 
+	private DependencyTree(String dep, String words, LargeInteger p, 
+			LargeInteger h, int K, HashAlgorithm hash) { 
 		this.K = K;
 		this.p = p;
 		this.h = h;
+		this.hash = hash;
 		growTree(dep, plantTree(words)); 
 	}
 
@@ -65,10 +68,9 @@ public class DependencyTree extends Tree {
 	 * @param K The sentence index.
 	 * @return A DependencyTree object.
 	 */
-	public static DependencyTree getInstance(String dep, String lemma, int K) {
-		return new DependencyTree(dep, lemma, K);
+	public static DependencyTree getInstance(String dep, String lemma) {
+		return new DependencyTree(dep, lemma);
 	}
-
 
 	/**
 	 * Preferable method of instantiation. Used to initialise the DependencyTree object.
@@ -78,10 +80,12 @@ public class DependencyTree extends Tree {
 	 * @param p BigInteger representation of a 20 digit prime.
 	 * @param h The truncated hash of p.
 	 * @param K The sentence index.
+	 * @param hash The hash algorithm.
 	 * @return A DependencyTree object.
 	 */
-	public static DependencyTree getInstance(String dep, String lemma, LargeInteger p, LargeInteger h, int K) {
-		return new DependencyTree(dep, lemma, p, h, K);
+	public static DependencyTree getInstance(String dep, String lemma, LargeInteger p, 
+			LargeInteger h, int K, HashAlgorithm hash) {
+		return new DependencyTree(dep, lemma, p, h, K, hash);
 	}
 
 	/**
@@ -198,7 +202,7 @@ public class DependencyTree extends Tree {
 				+ "3 chased chase VBD\n"
 				+ "4 the the DT\n"
 				+ "5 rabbit rabbit NN";
-		DependencyTree tree = DependencyTree.getInstance(dep, lemma, 0);
+		DependencyTree tree = DependencyTree.getInstance(dep, lemma);
 		System.out.println(tree.toString());
 	}
 }
