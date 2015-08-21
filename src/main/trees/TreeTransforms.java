@@ -30,6 +30,43 @@ public class TreeTransforms {
 	private TreeTransforms() {}
 
 
+
+
+	/**
+	 * Determine the number of children for a given node.
+	 *
+	 * <p> Complexity: O(lgN) where N is the number of nodes in the tree.
+	 *
+	 * @param node The root of this tree.
+	 * @param tags The path to be followed. Described by POS and dependency tags.
+	 * @return The number of children of a node.
+	 */
+	static int breadth (Node node, String tags) {
+		return breadth(node, tags.split(" "), 0);
+	}
+
+
+
+	/**
+	 * Determine the number of children for a given node.
+	 *
+	 * <p> Complexity: O(lgN) where N is the number of nodes in the tree.
+	 *
+	 * @param node The root of this tree.
+	 * @param tags The path to be followed. Described by POS and dependency tags.
+	 * @param i The current tag index.
+	 * @return The number of children of a node.
+	 */
+	private static int breadth (Node node, String [] tags, int i) {	
+		for (Node n : node.children) {
+			if (n.tag.equals(tags[i]) || n.gov_rel.equals(tags[i])) {
+				if (i == tags.length -1) return n.children.size();
+				return breadth(n, tags, ++i);
+			}
+		}
+		return -1;
+	}
+
 	/**
 	 * Determine whether a dependency tree has a particular feature.
 	 *
@@ -40,7 +77,7 @@ public class TreeTransforms {
 	 * @return Whether the tree contains the desired feature.
 	 */
 	static boolean hasFeature (Node node, String tags) {
-		return hasFeature(node, tags.split(" "), false, 0);
+		return hasFeature(node, tags.split(" "), 0);
 	}
 
 	/**
@@ -50,17 +87,17 @@ public class TreeTransforms {
 	 *
 	 * @param node The root of this tree.
 	 * @param tags The path to be followed. Described by depedency tags.
+	 * @param i Current tag index.
 	 * @return Whether the tree contains the desired feature.
 	 */
-	private static boolean hasFeature (Node node, String [] tags, boolean st, int i) {
+	private static boolean hasFeature(Node node, String [] tags, int i) {
 		for (Node n : node.children) {
-			boolean result;
-			if (i == tags.length) return st;
-			if (set.contains(tags[i])) result = n.tag.equals(tags[i]);
-			else result = n.gov_rel.equals(tags[i]);
-			if (result) return (result && hasFeature(n, tags, result, ++i));
+			if (n.tag.equals(tags[i]) || n.gov_rel.equals(tags[i])) {
+				if (i == (tags.length-1)) return true;
+				return hasFeature(n, tags, ++i);
+			}
 		}
-		return st;
+		return false;
 	}
 
 	/**
@@ -89,12 +126,12 @@ public class TreeTransforms {
 	 */
 	private static Node findSubtree (Node node, String [] tags, int i) {
 		for (Node n : node.children) {
-			if (i == tags.length) break;
-			else if (n.tag.equals(tags[i])) {
+			if (n.tag.equals(tags[i]) || n.gov_rel.equals(tags[i])) {
+				if (i == tags.length-1) return n;
 				return findSubtree(n, tags, ++i);
-			} 
+			}
 		}
-		return node;
+		return null;
 	}
 
 
@@ -205,6 +242,7 @@ public class TreeTransforms {
 	 * @param node The root of the tree.
 	 */
 	static void activeVoice (Node root) {
+		removeFullStop(root);
 		Node pp = removeSubtree(root, "S VP VP PP");
 		Node verb = removeSubtree( removeSubtree(root, "S VP"), "VP VP");
 		
@@ -235,6 +273,7 @@ public class TreeTransforms {
 	 * @param node The root of the tree.
 	 */
 	static void postAdjunct (Node root) {
+		removeFullStop(root);
 		Node adj = ParseTree.getInstance("ADVP ( RB Often )  )").root;
 		addSubtree(root, adj, "S");
 	}
@@ -265,6 +304,7 @@ public class TreeTransforms {
 		removeFullStop(root);
 		Node sbar = ParseTree.getInstance("( ROOT ( SBAR ( IN that ) ( S  ) ) )").root;
 		Node cleft = ParseTree.getInstance("( ROOT ( NP ( PRP It ) ) ( VP ( VBP was ) ) )").root;
+		
 		addSubtree(cleft, removeSubtree(root, "S VP NP"), "VP");
 		addSubtree(sbar, removeSubtree(root, "S NP"), "SBAR S");
 		addSubtree(sbar, removeSubtree(root, "S VP"), "SBAR S");
@@ -282,18 +322,11 @@ public class TreeTransforms {
 	 * @param node The root of the tree.
 	 */
 	static void removeCleft (Node root) {
+		removeFullStop(root);
 		Node sapling = ParseTree.getInstance("( ROOT ( S ) )").root;
+		
 		addSubtree(sapling, removeSubtree(root, "S VP SBAR S NP"), "S");
 		addSubtree(sapling, removeSubtree(root, "S VP SBAR S VP"), "S");
 		addSubtree(sapling, removeSubtree(root, "S VP NP"), "S VP", 1);
-		System.out.println(ParseTree.sketchTree(sapling, new StringBuilder(), 0));
 	}
-
-	static void topicalization (Node root) {
-	}
-
-	static void removeTopicalization (Node root) {
-	}
-
-
 }

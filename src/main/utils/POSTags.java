@@ -56,7 +56,8 @@ public enum POSTags {
 	CLN (":"),
 	SCLN (";"),
 	LRB ("-LRB-"),
-	RRB ("-RRB-");
+	RRB ("-RRB-"),
+	QTM("\"");
 
 	private String tag;
 

@@ -8,7 +8,6 @@
 package src.main.trees;
 import src.main.utils.HashAlgorithms;
 import src.main.utils.LargeInteger;
-import src.main.nlg.PhraseFactory;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -82,8 +81,10 @@ public class ReadFile {
 		String[] deps = fileToString(dep).split("\n\n");
 		String[] tags = fileToString(pos).split("\n\n");
 		DependencyTree[] forest = new DependencyTree[tags.length];
-		for (int i = 0; i < tags.length; i++) 
+		for (int i = 0; i < tags.length; i++) {
+			//System.out.println(i);
 			forest[i] = DependencyTree.getInstance(deps[i], tags[i], p, h, i);
+		}
 		return forest;
 	}
 

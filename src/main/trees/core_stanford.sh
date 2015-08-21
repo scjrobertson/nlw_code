@@ -24,7 +24,7 @@ xml="$root"".xml";
 echo $path;
 mkdir -p $path;
 
-java -Xmx2g -cp .:$core:$models:$xom:$joda:$jollyday:$ejml $class -annotators $options -file $input;
+java -Xmx6g -cp .:$core:$models:$xom:$joda:$jollyday:$ejml $class -annotators $options -file $input;
 mv $file.xml $path;
 xmlstarlet tr lemma.xsl $path/$file.xml > $path/$lemma;
 xmlstarlet tr parse.xsl $path/$file.xml > $path/$parse;

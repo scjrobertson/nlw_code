@@ -15,4 +15,4 @@ echo $parse
 echo $dep
 echo $lemma
 javac -cp .:$SNLG $CPATH;
-java -cp .:$SNLG $COMPILE $parse $dep $lemma;
+java -Xmx6g -cp .:$SNLG $COMPILE $parse $dep $lemma;

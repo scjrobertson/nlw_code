@@ -9,7 +9,6 @@ package src.main.trees;
 import src.main.utils.POSTags;
 import src.main.utils.LargeInteger;
 import src.main.utils.TonelliShanks;
-import src.main.nlg.PhraseFactory;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Stack;
@@ -117,8 +116,7 @@ public class ParseTree extends Tree {
 	 * @return The sentence desribed by the parse tree.
 	 */
 	public String getSentence () {
-		String s = getSentence(this.root, new StringBuilder()).toString();
-		return s;
+		return getSentence(this.root, new StringBuilder()).toString();
 	}
 
 	/** 
@@ -138,7 +136,6 @@ public class ParseTree extends Tree {
 			String word = node.word;
 			if (word.equals("-LRB-")) word = "(";
 			else if (word.equals("-RRB-")) word = ")";
-			if (this.set.contains(word)) sb.deleteCharAt(sb.length()-1);
 			sb.append(word + " ");
 		}
 		for (Node n : node.children) sb = getSentence(n, sb);

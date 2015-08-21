@@ -25,7 +25,7 @@ class Node {
 	int N;
 	String tag;
 	String word;
-	String gov_rel;
+	String gov_rel = "";
 
 	/* Instantiates the Node object.
 	 *
