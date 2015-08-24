@@ -22,6 +22,7 @@ dep="$root""_dep.txt";
 xml="$root"".xml";
 
 echo $path;
+rm -r $path;
 mkdir -p $path;
 
 java -Xmx6g -cp .:$core:$models:$xom:$joda:$jollyday:$ejml $class -annotators $options -file $input;

@@ -84,7 +84,6 @@ public class ReadFile {
 		String[] tags = fileToString(pos).split("\n\n");
 		DependencyTree[] forest = new DependencyTree[tags.length];
 		for (int i = 0; i < tags.length; i++) {
-			//System.out.println(i);
 			forest[i] = DependencyTree.getInstance(deps[i], tags[i], p, h, i, hash);
 		}
 		return forest;

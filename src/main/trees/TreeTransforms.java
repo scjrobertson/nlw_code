@@ -29,9 +29,6 @@ public class TreeTransforms {
 	 */
 	private TreeTransforms() {}
 
-
-
-
 	/**
 	 * Determine the number of children for a given node.
 	 *
@@ -328,5 +325,34 @@ public class TreeTransforms {
 		addSubtree(sapling, removeSubtree(root, "S VP SBAR S NP"), "S");
 		addSubtree(sapling, removeSubtree(root, "S VP SBAR S VP"), "S");
 		addSubtree(sapling, removeSubtree(root, "S VP NP"), "S VP", 1);
+	}
+
+
+	/**
+	 * Determines whether a sentence is a simple subj-verb-obj sentence.
+	 *
+	 * @param t A Dependency tree
+	 * @return Whether a sentence is simple or not.
+	 */
+	static boolean isSimple (Tree t) {
+		if (t instanceof DependencyTree) {
+			return (breadth(t.root, "root") >= 2 && hasFeature(t.root, "root nsubj") 
+					&& hasFeature(t.root, "root dobj"));
+			
+		} else return false;
+	}
+
+	/**
+	 * Determines whether a simple sentence is the passive voice.
+	 *
+	 * @param t A Dependency tree
+	 * @return Whether a sentence is passive or not.
+	 */
+	static boolean isPassive (Tree t) {
+		if (t instanceof DependencyTree) {
+			return (breadth(t.root, "root") == 3 && hasFeature(t.root, "root nsubjpass") 
+					&& hasFeature(t.root, "root auxpass"));
+			
+		} else return false;
 	}
 }

@@ -54,7 +54,7 @@ abstract class Tree {
 	 *
 	 * @return The LargeInteger representation of R.
 	 */
-	public void assignRank () {
+	void assignRank () {
 		LargeInteger s = LargeInteger.getInstance(this.getBinaryString(), 2);
 		LargeInteger b = this.hash.hashString(s.toString());
 		this.rank =  b.xor(this.h);
@@ -69,6 +69,16 @@ abstract class Tree {
 	 */
 	public LargeInteger getRank () {
 		return this.rank;
+	}
+
+
+	/**
+	 * Returns the position of a sentence within the body of text.
+	 *
+	 * @return The sentence index.
+	 */
+	public int getK () {
+		return this.K;
 	}
 
 	/**
