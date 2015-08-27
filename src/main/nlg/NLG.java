@@ -164,6 +164,24 @@ public class NLG {
 		return this.realiser.realiseSentence( s );		
 	}
 
+
+	/**
+	 * Create a simple past tense sentence
+	 *
+	 * @return A pseudo-random sentence.
+	 */
+	public String[] passive () {
+		NPPhraseSpec obj = createNounPhrase();
+		VPPhraseSpec verb = createVerbPhrase();
+		NPPhraseSpec subj = createNounPhrase();
+		SPhraseSpec s = this.nlgFactory.createClause( subj, verb, obj );
+		s.setFeature( Feature.TENSE, Tense.PAST );
+		String past = this.realiser.realiseSentence( s );
+		s.setFeature (Feature.PASSIVE, true );
+		String pass = this.realiser.realiseSentence( s );
+		String [] result = {past, pass};
+		return result; 
+	}
 	/**
 	 * Get a random integer between 0 and N.
 	 *
@@ -182,10 +200,12 @@ public class NLG {
 	 * @param args Standard input
 	 */
 	public static void main (String [] args) {
-		NLG nlg = NLG.getInstance( args, 4 );
-		for (int i = 0; i < 1000; i++ ) {
-			System.out.println( nlg.generateSentence()  );
+		int N = 1000;
+		NLG nlg = NLG.getInstance( args, 2 );
+		for (int i = 0; i < N; i++ ) {
+			System.out.println( nlg.generateSentence() );
 		}
+
 	}
 	
 }

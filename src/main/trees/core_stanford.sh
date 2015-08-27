@@ -5,7 +5,7 @@ models="../resources/stanford-corenlp-3.5.2-models.jar";
 xom="../resources/xom.jar";
 joda="../resources/joda-time.jar";
 jollyday="../resources/jollyday.jar";
-ejml="ejml-0.23.jar";
+ejml="../resources/ejml-0.23.jar";
 class="edu.stanford.nlp.pipeline.StanfordCoreNLP";
 options="tokenize,ssplit,pos,lemma,ner,parse"; #"dcoref";
 
@@ -21,7 +21,6 @@ parse="$root""_parse.txt";
 dep="$root""_dep.txt";
 xml="$root"".xml";
 
-echo $path;
 rm -r $path;
 mkdir -p $path;
 

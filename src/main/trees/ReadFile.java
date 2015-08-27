@@ -106,7 +106,7 @@ public class ReadFile {
 			if (args[0].equals("-p")) forest = processParse(args[1], p, h, sha);
 			if (args[0].equals("-d")) forest = processDependency(args[1], args[2], p, h, sha);
 			for (int i = 0; i < forest.length; i++) {  
-				System.out.println(forest[i].getSentence() + "\n" + forest[i] + "\n" + forest[i].getBinaryString() + "\n");
+				System.out.println(forest[i].getSentence() + forest[i]);
   			}
 		}
 	}

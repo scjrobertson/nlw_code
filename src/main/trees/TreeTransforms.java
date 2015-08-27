@@ -206,6 +206,18 @@ public class TreeTransforms {
 	
 
 	/**
+	 * Adds a full stop to a parse tree.
+	 *
+	 * <p> Complexity: Constant
+	 *
+	 * @param node the root of the tree.
+	 */
+	static void addFullStop (Node root) {
+		addSubtree( root, new Node(".", ".") , "S" );
+	}
+
+
+	/**
 	 * Changes the applicable sentence to its passive voice.The sentence must
 	 * have a transitive verb with a direct object for passivisation.
 	 *
@@ -216,6 +228,7 @@ public class TreeTransforms {
 	 */
 	static void passiveVoice (Node root) {
 		removeFullStop(root);
+		
 		Node pp = ParseTree.getInstance("( ROOT ( PP ( IN by ) ) )").root;
 		Node v = ParseTree.getInstance("( ROOT ( VP ) )").root;
 
@@ -225,6 +238,8 @@ public class TreeTransforms {
 		addSubtree( v, removeSubtree(root, "S VP"), "VP");
 		addSubtree( v, pp.children, "VP VP");
 		addSubtree( root, v.children, "S");
+
+		addFullStop(root);
 	}
 
 
@@ -350,9 +365,7 @@ public class TreeTransforms {
 	 */
 	static boolean isPassive (Tree t) {
 		if (t instanceof DependencyTree) {
-			return (breadth(t.root, "root") == 3 && hasFeature(t.root, "root nsubjpass") 
-					&& hasFeature(t.root, "root auxpass"));
-			
+			return (hasFeature(t.root, "root nsubjpass") || hasFeature(t.root, "root dep nsubjpass"));
 		} else return false;
 	}
 }
