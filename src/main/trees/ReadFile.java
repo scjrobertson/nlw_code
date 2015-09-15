@@ -89,6 +89,16 @@ public class ReadFile {
 		return forest;
 	}
 
+	public static int [] getKey (String key, LargeInteger p, LargeInteger h) {
+		String[] keys = fileToString(key).split("\n");
+		p = LargeInteger.getInstance(keys[0]);
+		h = LargeInteger.getInstance(keys[1]);
+		String[] bits = keys[2].split("\t");
+		int [] msg = new int [bits.length];
+		for (int i = 0; i < bits.length; i++) msg[i] = Integer.parseInt(bits[i]);
+		return msg;
+	}
+
 	/**
 	 * Run as main of package.Flags -p : parse s-expression file
 	 * 				-d: parse dependency and pos files 

@@ -201,7 +201,7 @@ public class NLG {
 	 */
 	public static void main (String [] args) {
 		int N = 1000;
-		NLG nlg = NLG.getInstance( args, 2 );
+		NLG nlg = NLG.getInstance( args, 3 );
 		for (int i = 0; i < N; i++ ) {
 			System.out.println( nlg.generateSentence() );
 		}

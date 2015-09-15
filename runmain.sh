@@ -32,6 +32,12 @@ delete_existing () {
 	mkdir -p $1;
 }
 
+extract_key () {
+	cat $2 | awk 'NR < 4' > $1/$3;
+	tail -n +4 $2 > $1/swap.txt;
+	mv $1/swap.txt $2;
+}
+
 root_in=$1;
 root_out=$2;
 embed=$3;
@@ -49,6 +55,7 @@ path_out="$OUTPATH/$root_out";
 parse_out="$root_out""_parse.txt";
 dep_out="$root_out""_dep.txt";
 lemma_out="$root_out""_lemma.txt";
+key="$root_out""_key.txt";
 xml_out="$root_out.xml";
 
 javac $CPATH;
@@ -59,11 +66,13 @@ if [ $run = 1 ]
 				delete_existing $OUTPATH/$root_in;
 				stanford_parse $file_in $root_in.txt $path_in $lemma_in $parse_in $dep_in $xml_in;
 				java -Xmx6g $COMPILE $path_in/$parse_in $path_in/$dep_in $path_in/$lemma_in $embed > $OUTPATH/$root_out.txt;
+				extract_key $OUTPATH $file_out $key;
 
 		elif [ $embed = 1 ]
 			then
 				delete_existing $OUTPATH/$root_out;
 				stanford_parse $file_out $root_out.txt $path_out $lemma_out $parse_out $dep_out $xml_out;
-				java -Xmx6g $COMPILE $path_out/$parse_out $path_out/$dep_out $path_out/$lemma_out $embed;
+				cp $OUTPATH/$key $OUTPATH/$root_out
+				java -Xmx6g $COMPILE $path_out/$parse_out $path_out/$dep_out $path_out/$lemma_out $embed $path_out/$key >> long_fix.txt;
 		fi
 fi
