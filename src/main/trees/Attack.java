@@ -1,3 +1,11 @@
+/*************************************************************************
+ *  Compilation:  javac src/main/trees/Attack.java
+ *  Execution:    java src.main.trees.Attack
+ *  Dependencies: none
+ *
+ * This is a library of static methods used to attack the aready embedded watermark.
+ * Attacks include random and precise deletion, shuffling and conjunction.
+ *************************************************************************/
 package src.main.trees;
 import src.main.utils.HashAlgorithm;
 import src.main.utils.LargeInteger;
@@ -7,6 +15,13 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.HashMap;
 
+/**
+ * This is a library of static methods used to attack the aready embedded watermark.
+ * Attacks include random and precise deletion, shuffling and conjunction.
+ *
+ *@author SCJ Robertson, 16579852
+ *@since 17/09/15
+ */
 public class Attack {
 
 	private static final int PERC_DEL = 10;
@@ -16,12 +31,31 @@ public class Attack {
 	private static final int HASH_LENGTH = 8;
 	private static String HASH = "SHA-1";
 
+	/**
+	 * Class of static methods.
+	 */
 	private Attack() {}
 
+
+	/**
+	 * Opens a text file containing an embedded message and reads the
+	 * sentences.
+	 *
+	 * @param fileName The location and name of the file
+	 * @return An array of plain text sentences.
+	 */
 	public static String[] plainText (String fileName) {
 		return ReadFile.fileToString(fileName).trim().split("\n");
 	}
 
+	/**
+	 * Deletes a preset amount of randomly selected sentences from the
+	 * plain text.
+	 *
+	 * @param text An array of plain text sentences, containing a watermark.
+	 * @return An Array of plain text sentences. The input array with 
+	 * deleted entries.
+	 */
 	public static String[] randomDelete(String[] text) {
 		ArrayList<String> t = new ArrayList<String> ();
 		HashSet<Integer> keys = new HashSet<Integer> ();
@@ -37,6 +71,15 @@ public class Attack {
 
 	}
 
+	/**
+	 * Deletes a sentences with a high probability of being watermark
+	 * sentences.Uses a preset probability.
+	 *
+	 * @param text An array of plain text sentences, containing a watermark.
+	 * @param dep The plain text's sentences corresponding dependency trees.
+	 * @return An Array of plain text sentences. The input array with 
+	 * deleted entries.
+	 */
 	public static String[] preciseDelete(String [] text, DependencyTree[] dep) {
 		ArrayList<String> t = new ArrayList<String>();
 		
@@ -50,6 +93,13 @@ public class Attack {
 		return t.toArray( new String [t.size()] );
 	}
 
+	/**
+	 * Randomly shuffles the plain text sentences.
+	 *
+	 * @param text An array of plain text sentences, containing a watermark.
+	 * @return An Array of plain text sentences. The a shuffled variant of the
+	 * input sentences.
+	 */
 	public static String [] shuffle (String [] text) {
 		String [] t = Arrays.copyOfRange(text, 0, text.length);
 		HashMap<Integer, Integer> swaps = new HashMap<Integer, Integer>();
@@ -73,6 +123,14 @@ public class Attack {
 		return t;
 	}
 
+	/**
+	 * Randomly selects a sentence and joins it with it successor with the 
+	 * conjunction "and".
+	 *
+	 * @param text An array of plain text sentences, containing a watermark.
+	 * @return An Array of plain text sentences. The input array with deleted
+	 * entries.
+	 */
 	public static String [] conjunction(String [] text) {
 		ArrayList<String> t = new ArrayList<String>();
 		HashSet<Integer> keys = new HashSet<Integer> ();
@@ -91,8 +149,14 @@ public class Attack {
 		return t.toArray( new String [t.size()] );
 	}
 
-	public static void main (String args[]) {
 
+	/**
+	 * Coordinates the attacks.Input is from standard input, with the following format:
+	 * <p> Path to plain text, path to dependencies, path to lemma, attack type 
+	 *
+	 * @param args An array of input paths and attack types.
+	 */
+	public static void main (String args[]) {
 		HashAlgorithm sha = HashAlgorithm.getInstance(HASH, HASH_LENGTH);
 		LargeInteger p = LargeInteger.probablePrime(PRIME_LENGTH, new Random()); 
 		LargeInteger h = sha.hashString(p.toString());

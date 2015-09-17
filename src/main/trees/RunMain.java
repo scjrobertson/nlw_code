@@ -34,7 +34,15 @@ public class RunMain {
 	 */
 	private RunMain() {}
 
-
+	/**
+	 * Embeds a message within the plain text. This currently only 
+	 * makes use of active to passive transformations.
+	 *
+	 * @param parse An array of the plain text's corresponding syntactic parse trees.
+	 * @param dep An array of the plain text's corresponding dependency parse trees.
+	 * @param s A sorted set of syntactic parse trees, sorted according to their binary strings.
+	 * @param msg An array of the message's binary representation.
+	 */
 	public static void embed ( ParseTree[] parse, DependencyTree[] dep, 
 			SortedSet<Tree> s, int[] msg ) {
 		HashSet <Tree> discarded = new HashSet <Tree> ();
@@ -56,7 +64,16 @@ public class RunMain {
 		}	
 	}
 
-
+	/**
+	 * Extracts a message from within the plain text. This currently only 
+	 * makes use of active to passive transformations.
+	 *
+	 * @param parse An array of the plain text's corresponding syntactic parse trees.
+	 * @param dep An array of the plain text's corresponding dependency parse trees.
+	 * @param s A sorted set of syntactic parse trees, sorted according to their binary strings.
+	 * @param msgl The embedded messages length.
+	 * @return An array of the message's binary representation.
+	 */
 	public static int[] extract (DependencyTree[] dep, SortedSet<Tree> s, int msgl ) {
 		
 		int j;
@@ -74,6 +91,13 @@ public class RunMain {
 		return msg;
 	}
 
+
+	/**
+	 * Generates a random binary message at a preset length of the marker sentences.
+	 *
+	 * @param s A sorted set of syntactic parse trees, sorted according to their binary strings.
+	 * @return An array of the message's binary representation.
+	 */
 	public static int [] generateMessage (SortedSet <Tree> s) {
 		int N = (int) ( s.size()*(1.0*MSG_LENGTH/100) );
 		int [] msg = new int [N];
@@ -81,6 +105,14 @@ public class RunMain {
 		return msg;
 	}
 
+	/**
+	 * Prints the embedding process's output.Including the key information.
+	 *
+	 * @param parse The name of the file containing s-expressions.
+	 * @param p BigInteger representation of a 20 digit prime.
+	 * @param h The hash of the prime p
+	 * @param msg An array of the message's binary representation.
+	 */
 	public static void printOutput (ParseTree[] parse, LargeInteger p, LargeInteger h, int[] msg) {
 		System.out.println(p + "\n" + h);
 		for (int i = 0; i < msg.length; i++) System.out.print(msg[i] + "\t");
@@ -89,7 +121,8 @@ public class RunMain {
 	}
 
 	/**
-	 * Runs the embedding process.
+	 * Runs the embedding process.Input is from standard input, with the following format:
+	 * <p> Path to parse trees, path to dependencies, path to lemma, embedding/extraction
 	 *
 	 * @param args The file names of the parse, dependency and lemma files
 	 */
