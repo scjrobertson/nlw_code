@@ -24,38 +24,17 @@ To compile and run this, use the following commands:
 ## Running current setup ##
 
 ### Parsing a plain text document ###
-To parse an input body of text using the Stanford coreNLP, compile and run **core_standford.sh**. This bash script is 
-found in **nlw_code/src/main/trees**, it is compiled as follows:
+The current set up is run by three bash scripts **runmain.sh**, **generate.sh** and **test.sh** found in **nlw_code/**. 
 
-     chmod a+x core_stanford.txt
+#### generate.sh ###
+generate.sh creates simple cover text consisting solely of active sentences, it is complied and run as follows:
 
-The script can now be run as follows, an input body of text must always be placed in **nlw_code/src/main/output**:
+     chmod a+x generate.sh
+     ./generate **output_file** **compile/run**
 
-     ./core_stanford.sh ../output/text.txt
+This generates a 1000 simple active sentences, a reasonable length for testing purposes and does not require excessive parsing time. **output_file** is the cover text's file name and is placed in **nlw_code/src/main/output**. **compile/run** is a binary flag which determine whether the **nlw_code/src/main/nlg/NLG.java** is complied or run.
+    * **0**: Compiled the program.
 
-This will create three output files, in the folder **src/main/output/text**, for each input file:
-
-* text_lemma.txt - The POS tags and lemmas of the sentences.
-* text_dep.txt - The basic dependencies describing the text.
-* text_parse.txt - The syntactic parse trees' s-expressions.
-
-Two bodies of text **moby.txt** and **sense.txt** have been included in **nlw_code/src/main/output/** to run as examples. Any body of plain text
-is suitable for parsing.
-
-### Output parse trees and binary strings ###
-The current implementation only re-parses the Stanford coreNLP output and
-allows the binary strings of each sentence to be generated. The Java files can be compiled
-from the root folder **nlw_code/** as follows:
-
-    javac -cp .:src/main/resources/simplenlg-v4.4.2.jar src/main/trees/ReadFile.java
-
-The file is then run using one of two flags. For dependency output, the **-d** flag is used:
-
-    java -cp .:src/main/resources/simplenlg-v4.4.2.jar src.main.trees.ReadFile -d src/main/output/text/text_dep.txt src/main/output/text/text_lemma.txt
-
-For syntactic parse trees the **-p** flag is used:
-
-    java -cp .:src/main/resources/simplenlg-v4.4.2.jar src.main.trees.ReadFile -p src/main/output/text/text_parse.txt
 
 ##API##
 
