@@ -10,3 +10,7 @@
 *.java~
 *.swp
 *.swo
+*.gz
+*.model
+*.mdl
+parse-eng

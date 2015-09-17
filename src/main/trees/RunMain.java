@@ -123,11 +123,7 @@ public class RunMain {
 				int [] rec = extract(dep, s, msg.length);
 				int ber = 0;
 
-				for (int i = 0; i < msg.length; i++) {
-					ber += msg[i] ^ rec[i];
-					//System.out.println(msg[i] + "\t" + rec[i] + "\t" + parse[i].getSentence());
-
-				}				
+				for (int i = 0; i < msg.length; i++) ber += msg[i] ^ rec[i];
 				System.out.println( (100.0*ber )/msg.length + ";" + p);
 			}
 

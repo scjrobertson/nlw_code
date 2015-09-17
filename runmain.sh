@@ -1,7 +1,9 @@
 #!/bin/bash
 
-CPATH="src/main/trees/RunMain.java"
+CPATH="src/main/trees/RunMain.java";
+CPATH_ATTACK="src/main/trees/Attack.java";
 COMPILE="src.main.trees.RunMain";
+COMPILE_ATTACK="src.main.trees.Attack";
 RESOURCES="src/main/resources";
 TREES="src/main/trees";
 OUTPATH="src/main/output";
@@ -40,8 +42,9 @@ extract_key () {
 
 root_in=$1;
 root_out=$2;
-embed=$3;
-run=$4;
+run=$3;
+embed=$4;
+attack=$5;
 
 file_in=$OUTPATH/$root_in.txt;
 path_in="$OUTPATH/$root_in";
@@ -59,6 +62,7 @@ key="$root_out""_key.txt";
 xml_out="$root_out.xml";
 
 javac $CPATH;
+javac $CPATH_ATTACK;
 if [ $run = 1 ]
 	then 
 		if [ $embed = 0 ] 
@@ -73,6 +77,16 @@ if [ $run = 1 ]
 				delete_existing $OUTPATH/$root_out;
 				stanford_parse $file_out $root_out.txt $path_out $lemma_out $parse_out $dep_out $xml_out;
 				cp $OUTPATH/$key $OUTPATH/$root_out
-				java -Xmx6g $COMPILE $path_out/$parse_out $path_out/$dep_out $path_out/$lemma_out $embed $path_out/$key >> long_fix.txt;
+				java -Xmx6g $COMPILE $path_out/$parse_out $path_out/$dep_out $path_out/$lemma_out $embed $path_out/$key; #>> long_fix.txt;
+		elif [ $embed = 2 ]
+			then
+				if [ $attack = 1 ]
+					then
+						delete_existing $OUTPATH/$root_out;
+						stanford_parse $file_out $root_out.txt $path_out $lemma_out $parse_out $dep_out $xml_out;
+						cp $OUTPATH/$key $OUTPATH/$root_out;
+				fi
+				java -Xmx6g $COMPILE_ATTACK $OUTPATH/$root_out.txt $path_out/$dep_out $path_out/$lemma_out $attack > $OUTPATH/attacked.txt;
+				mv $OUTPATH/attacked.txt $OUTPATH/$root_out.txt
 		fi
 fi
