@@ -30,9 +30,9 @@ The current set up is run by three bash scripts **runmain.sh**, **generate.sh** 
 generate.sh creates simple cover text consisting solely of active sentences, it is complied and run as follows:
 
      chmod a+x generate.sh
-     ./generate [output_file] [compile/run]
+     ./generate [output_root] [compile/run]
 
-This generates a 1000 simple active sentences, a reasonable length for testing purposes and does not require excessive parsing time. **output_file** is the cover text's file name and is placed in **nlw_code/src/main/output**, choose a name. **compile/run** is a binary flag which determine whether the **nlw_code/src/main/nlg/NLG.java** is complied or run.
+This generates a 1000 simple active sentences, a reasonable length for testing purposes and does not require excessive parsing time. **output_root** is the cover text's file name and is placed in **nlw_code/src/main/output**, choose a name. **compile/run** is a binary flag which determine whether the **nlw_code/src/main/nlg/NLG.java** is complied or run.
 
 * 0: Compile the program.
 * 1: Run the program.
@@ -41,9 +41,9 @@ This generates a 1000 simple active sentences, a reasonable length for testing p
 runmain.sh controls the **embedding**, **attacking** and **extraction** procedures. The embedding algorithm embeds a random binary message within the plain text, at a pre-set length ( a percentage of the unique marker sentences ). The attacks include random and precise **deletion**, **shuffling** and **conjunction**. The extraction algorithm extracts the embedded message and determines the bit error rate (**BER**). runmain.sh parses the cover text using the **Stanford coreNLP**, it is run and complied as follows:
  
     chmod a+x generate.sh
-    ./runmain.sh [input_file] [output_root] [compile/run] [embed/extract] [attack_type]
+    ./runmain.sh [input_root] [output_root] [compile/run] [embed/extract] [attack_type]
 
-**input_root** is the output file produce by generate.sh, found in **nlw_code/src/main/output**. **output_root** creates two folders within**nlw_code/src/main/output**. 
+**input_root** is the output file produce by generate.sh, found in **nlw_code/src/main/output**. **output_root** creates two folders within **nlw_code/src/main/output**, both containing parse, dependency, lemma and key files. The key files contain the secret key specific to the embedding and the embedded message for the BER. **nlw_code/src/main/output/input_root** contains the files for the input cover text and **nlw_code/src/main/output/output_root** the files for the watermarked text.
 
 
 ##API##
