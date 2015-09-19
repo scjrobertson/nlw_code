@@ -34,6 +34,20 @@ delete_existing () {
 	mkdir -p $1;
 }
 
+delete_embed () {
+	line=$(grep -nr '####EOEA####' $2 | cut -f1 -d:);
+	line=$(( line + 1 ));
+	tail -n +$line $2 > $1/swap.txt;
+	mv $1/swap.txt $2;
+}
+
+delete_extract () {
+	l1=$(grep -nr '####BOEA####' $1 | cut -f1 -d:);
+	l2=$(grep -nr '####EOEA####' $1 | cut -f1 -d:);
+	l3="-i.bak -e $l1,$l2"d" $1" ;
+	sed $l3;
+}
+
 extract_key () {
 	cat $2 | awk 'NR < 4' > $1/$3;
 	tail -n +4 $2 > $1/swap.txt;
@@ -44,7 +58,9 @@ root_in=$1;
 root_out=$2;
 run=$3;
 embed=$4;
-attack=$5;
+supervise=$5;
+attack=$6;
+store_file=$7;
 
 file_in=$OUTPATH/$root_in.txt;
 path_in="$OUTPATH/$root_in";
@@ -69,7 +85,11 @@ if [ $run = 1 ]
 			then 
 				delete_existing $OUTPATH/$root_in;
 				stanford_parse $file_in $root_in.txt $path_in $lemma_in $parse_in $dep_in $xml_in;
-				java -Xmx6g $COMPILE $path_in/$parse_in $path_in/$dep_in $path_in/$lemma_in $embed > $OUTPATH/$root_out.txt;
+				java -Xmx6g $COMPILE $path_in/$parse_in $path_in/$dep_in $path_in/$lemma_in $embed $path_out/$key $supervise | tee $OUTPATH/$root_out.txt;
+				if [ $supervise = 1 ]
+					then
+						delete_embed $OUTPATH $file_out;
+				fi
 				extract_key $OUTPATH $file_out $key;
 
 		elif [ $embed = 1 ]
@@ -77,7 +97,11 @@ if [ $run = 1 ]
 				delete_existing $OUTPATH/$root_out;
 				stanford_parse $file_out $root_out.txt $path_out $lemma_out $parse_out $dep_out $xml_out;
 				cp $OUTPATH/$key $OUTPATH/$root_out
-				java -Xmx6g $COMPILE $path_out/$parse_out $path_out/$dep_out $path_out/$lemma_out $embed $path_out/$key; #>> long_fix.txt;
+				java -Xmx6g $COMPILE $path_out/$parse_out $path_out/$dep_out $path_out/$lemma_out $embed $path_out/$key $supervise | tee -a $store_file;
+				if [ $supervise = 1 ]
+					then
+						delete_extract $store_file;
+				fi
 		elif [ $embed = 2 ]
 			then
 				if [ $attack = 1 ]

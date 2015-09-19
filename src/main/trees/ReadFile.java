@@ -89,14 +89,48 @@ public class ReadFile {
 		return forest;
 	}
 
-	public static int [] getKey (String key, LargeInteger p, LargeInteger h) {
+
+	/**
+	 * Retrieves the secret key used for embedding.
+	 *
+	 * @param key Path to key file.
+	 * @param p BigInteger representation of a 20 digit prime.
+	 * @param h The hash of the prime p
+	 * @return An array of embedded message bits
+	 */
+	public static int [] getMessage (String key) {
 		String[] keys = fileToString(key).split("\n");
-		p = LargeInteger.getInstance(keys[0]);
-		h = LargeInteger.getInstance(keys[1]);
 		String[] bits = keys[2].split("\t");
 		int [] msg = new int [bits.length];
 		for (int i = 0; i < bits.length; i++) msg[i] = Integer.parseInt(bits[i]);
 		return msg;
+	}
+
+
+	/**
+	 * Retrieves the secret key used for embedding.
+	 *
+	 * @param key Path to key file.
+	 * @param p BigInteger representation of a 20 digit prime.
+	 * @param h The hash of the prime p
+	 * @return An array of embedded message bits
+	 */
+	public static LargeInteger getPrime (String key) {
+		String[] keys = fileToString(key).split("\n");
+		return LargeInteger.getInstance(keys[0]);
+	}
+
+	/**
+	 * Returns a list of primes proven to be reliable.
+	 *
+	 *@param fileName The path to the golden primes file.
+	 *@return An array of golden primes.
+	 */
+	public static LargeInteger[] getGoldenPrimes (String fileName) {
+		String[] primes = fileToString(fileName).split("\n");
+		LargeInteger [] p = new LargeInteger[primes.length];
+		for (int i = 0; i < primes.length; i++) p[i] = LargeInteger.getInstance(primes[i]);
+		return p;
 	}
 
 	/**
