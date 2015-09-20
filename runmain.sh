@@ -59,8 +59,10 @@ root_out=$2;
 run=$3;
 embed=$4;
 supervise=$5;
-attack=$6;
-store_file=$7;
+specific=$6;
+attack=$7;
+store_file=$8;
+message=$9;
 
 file_in=$OUTPATH/$root_in.txt;
 path_in="$OUTPATH/$root_in";
@@ -77,6 +79,29 @@ lemma_out="$root_out""_lemma.txt";
 key="$root_out""_key.txt";
 xml_out="$root_out.xml";
 
+
+if [ $root_in = "--help" ]
+	then
+	echo -e "Below are the flags required to run the program, all must be input even if they are not required.\nNo extensions are required for input/output files - assumed to be .txt.\n"
+	echo -e "1. root_in - The folder of input cover text in src/main/output";
+	echo -e "2. root_out - The output file in src/main/output"
+	echo -e "3. run - Determines whether the program compiles or runs source code.
+	0: Compile\n\t1: Run";
+	echo -e "4. command - Determines what process is to be completed.
+	0: Embed\n\t1: Extract\n\t2: Attack";
+	echo -e "5. supervision - Determines whether the transforms are completed automatically or by hand.
+	0: Unsupervised\n\t1: Supervised";
+	echo -e "6. specific - Embed a specific message.
+	0: Random\n\t1: Specific";
+	echo -e "7. Attack type - Choose which attack is performed on the watermarked text.
+	0: Random deletion\n\t1: Precise deletion 
+	2: Shuffle\n\t3: Conjunction";
+	echo -e "8. Store file - The file in nlw_code/ where BER data is stored.";
+	echo -e "9. message - The specific message to be embedded, if any. Separated with dashes: i.e 0-1-1-1-0-1\n"
+	exit 1;
+
+fi
+
 javac $CPATH;
 javac $CPATH_ATTACK;
 if [ $run = 1 ]
@@ -85,7 +110,7 @@ if [ $run = 1 ]
 			then 
 				delete_existing $OUTPATH/$root_in;
 				stanford_parse $file_in $root_in.txt $path_in $lemma_in $parse_in $dep_in $xml_in;
-				java -Xmx6g $COMPILE $path_in/$parse_in $path_in/$dep_in $path_in/$lemma_in $embed $path_out/$key $supervise | tee $OUTPATH/$root_out.txt;
+				java -Xmx6g $COMPILE $path_in/$parse_in $path_in/$dep_in $path_in/$lemma_in $embed $path_out/$key $supervise $specific $message | tee $OUTPATH/$root_out.txt;
 				if [ $supervise = 1 ]
 					then
 						delete_embed $OUTPATH $file_out;

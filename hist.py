@@ -1,8 +1,7 @@
 import numpy as np
 from matplotlib import pylab as plt
 
-FNAME = "golden_primes.txt"
-#FNAME = "long_fix.txt"
+FNAME = "primes.txt"
 M = 10
 
 def normal(x, mean = 0, var = 1):

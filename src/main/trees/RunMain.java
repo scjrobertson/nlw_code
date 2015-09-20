@@ -17,6 +17,7 @@ import java.util.TreeSet;
 import java.util.HashSet;
 import java.util.Arrays;
 import java.util.Scanner;
+import javax.swing.JOptionPane;
 
 /**
  * Runs the embedding and extraction process.
@@ -121,7 +122,7 @@ public class RunMain {
 		for ( int i = 0; i < msgl; i++ ) {
 			j  = s.first().getK() + 1;
 			
-			if ( j == dep.length ) ;
+			if ( j == dep.length ) i--;
 			else if ( TreeTransforms.isPassive(dep[j]) ) msg[i] = 1;
 			else msg[i] = 0;
 			
@@ -174,6 +175,21 @@ public class RunMain {
 		return msg;
 	}
 
+
+	/**
+	 * Parse a specific binary message.
+	 *
+	 * @param message A specific message to be embedded.
+	 * @return An array of the message's binary representation.
+	 */
+	public static int [] specificMessage (String message) {
+		JOptionPane.showInputDialog(null, message, message);
+		String [] m = message.split("-");
+		int [] msg = new int [m.length];
+		for (int i = 0; i < m.length; i++) msg[i] = Integer.parseInt(m[i]);
+		return msg;
+	}
+
 	/**
 	 * Prints the embedding process's output.Including the key information.
 	 *
@@ -211,9 +227,9 @@ public class RunMain {
 	 */
 	public static void main (String [] args) {
 		HashAlgorithm sha = HashAlgorithm.getInstance(HASH, HASH_LENGTH);
-		//LargeInteger p = LargeInteger.probablePrime(PRIME_LENGTH, new Random()); 
+		LargeInteger p = LargeInteger.probablePrime(PRIME_LENGTH, new Random()); 
 		//LargeInteger p = LargeInteger.getInstance("11055716757729592891");
-		LargeInteger p = primes[ (int) (Math.random()*primes.length) ];
+		//LargeInteger p = primes[ (int) (Math.random()*primes.length) ];
 		LargeInteger h = sha.hashString(p.toString());
 		ParseTree[] parse; DependencyTree[] dep; 
 		SortedSet <Tree> s = new TreeSet <Tree> ( new RankComparator() );
@@ -227,6 +243,8 @@ public class RunMain {
 				
 				s.addAll(Arrays.asList(parse));
 				msg = generateMessage(s);
+				if (args[6].equals("1")) msg = specificMessage(args[7]);
+				else msg = generateMessage(s);
 
 				if (args[5].equals("0")) embed(parse, dep, s, msg);
 				else supervisedEmbed(parse, dep, s, msg);
@@ -241,8 +259,8 @@ public class RunMain {
 
 				s.addAll(Arrays.asList(parse));
 				int [] rec = new int[msg.length];
-				if (args[5].equals("0")) extract(dep, s, msg.length);
-				else supervisedExtract(dep, s, msg.length);
+				if (args[5].equals("0")) rec = extract(dep, s, msg.length);
+				else rec = supervisedExtract(dep, s, msg.length);
 				int ber = 0;
 
 				for (int i = 0; i < msg.length; i++) ber += msg[i] ^ rec[i];

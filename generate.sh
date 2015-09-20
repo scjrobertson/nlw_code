@@ -15,6 +15,17 @@ ADJECTIVES="src/main/nlg/adjectives.txt";
 PREPOSITIONS="src/main/nlg/prepositions.txt";
 PRONOUNS="src/main/nlg/pronouns.txt";
 
+if [ $out = "--help" ]
+then
+	echo -e "\nGenerate cover text for the toy embedding algorithm.
+Consists of 1000 simple, past tense active sentences."
+	echo -e "1. root_out - The file name, excluding extention, of the output.
+      	\tThe file is placed in nlw_code/src/main/output."
+	echo -e "2. run/compile - Run or compile the source code.
+	\t0: Compile\n\t\t1: Run\n"
+	exit 1;
+fi
+
 javac -cp .:$SIMPLE $CPATH;
 if [ $run = 1 ]
 	then java -Xmx6g -cp .:$SIMPLE $COMPILE $NOUNS $VERBS $ADVERBS $ADJECTIVES $PREPOSITIONS  > $OUTPUT/$out.txt;
