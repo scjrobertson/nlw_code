@@ -7,6 +7,7 @@
  * Attacks include random and precise deletion, shuffling and conjunction.
  *************************************************************************/
 package src.main.trees;
+import src.main.nlg.NLG;
 import src.main.utils.HashAlgorithm;
 import src.main.utils.LargeInteger;
 import java.util.Arrays;
@@ -30,6 +31,9 @@ public class Attack {
 	private static final int PRIME_LENGTH = 64;
 	private static final int HASH_LENGTH = 8;
 	private static String HASH = "SHA-1";
+	public static String ADR = "src/main/nlg/";
+	public static String [] FILES = { ADR + "nouns.txt", ADR + "verbs.txt", ADR + "adverbs.txt",
+					ADR + "adjectives.txt", ADR + "prepositions.txt"};
 
 	/**
 	 * Class of static methods.
@@ -149,6 +153,25 @@ public class Attack {
 		return t.toArray( new String [t.size()] );
 	}
 
+	/**
+	 * Randomly inserts a sentence in the plain text.
+	 *
+	 * @param text An array of plain text sentences, containing a watermark.
+	 * @return An Array of plain text sentences. The input array with inserted
+	 * entries.
+	 */
+	public static String[] insertion(String [] text) {
+		ArrayList<String> t = new ArrayList(Arrays.asList(text));
+		HashSet<Integer> keys = new HashSet<Integer>();
+		NLG nlg = NLG.getInstance(FILES, 6);
+		int L = t.size();
+		int N = (int) ( L*(1.0*PERC_DEL/100) );
+
+		while (keys.size() < N) keys.add( (int) (Math.random()*(L-1) ) );
+		for (int i : keys) t.add(i, nlg.generateSentence());
+		return  t.toArray( new String [t.size()] );
+	}
+
 
 	/**
 	 * Coordinates the attacks.Input is from standard input, with the following format:
@@ -181,6 +204,9 @@ public class Attack {
 					break;
 				case "3":
 					attacked = conjunction(text);
+					break;
+				case "4":
+					attacked = insertion(text);
 					break;
 				default:
 					break;
