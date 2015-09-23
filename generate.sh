@@ -28,8 +28,8 @@ fi
 
 javac -cp .:$SIMPLE $CPATH;
 if [ $run = 1 ]
-	then java -Xmx6g -cp .:$SIMPLE $COMPILE $NOUNS $VERBS $ADVERBS $ADJECTIVES $PREPOSITIONS  > $OUTPUT/$out.txt;
+	then java -Xmx2g -cp .:$SIMPLE $COMPILE $NOUNS $VERBS $ADVERBS $ADJECTIVES $PREPOSITIONS  > $OUTPUT/$out.txt;
 	elif [ $run = 2 ]
-	then java -Xmx6g -cp .:$SIMPLE $COMPILE $NOUNS $VERBS $ADVERBS $ADJECTIVES $PREPOSITIONS;
+	then java -Xmx2g -cp .:$SIMPLE $COMPILE $NOUNS $VERBS $ADVERBS $ADJECTIVES $PREPOSITIONS;
 fi
 

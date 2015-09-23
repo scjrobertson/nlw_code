@@ -2,6 +2,7 @@
 
 store_file=$1;
 test_type=$2;
+attack_type=$3;
 batch=$3;
 
 if [ $store_file = "--help" ]
@@ -26,7 +27,7 @@ do
 		./runmain.sh gen embed 1 1 0 0 0 $store_file.txt;
 	elif [ $test_type = 1 ]
 	then
-		j=1;
+		j=0;
 		ber=50;
 		pr="0";
 		m="0";
@@ -52,5 +53,10 @@ do
 			m="1";
 		done
 		echo $j >> $store_file"_tries.txt";
+	elif [ $test_type = 2 ]
+	then
+		./runmain.sh gen embed 1 0 0 0 0 $store_file.txt; 
+		./runmain.sh gen embed 1 2 0 0 $attack $store_file.txt;
+		./runmain.sh gen embed 1 1 0 0 0 $store_file.txt;
 	fi
 done

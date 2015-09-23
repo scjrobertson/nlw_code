@@ -17,7 +17,6 @@ import java.util.TreeSet;
 import java.util.HashSet;
 import java.util.Arrays;
 import java.util.Scanner;
-import javax.swing.JOptionPane;
 
 /**
  * Runs the embedding and extraction process.
@@ -183,7 +182,6 @@ public class RunMain {
 	 * @return An array of the message's binary representation.
 	 */
 	public static int [] specificMessage (String message) {
-		JOptionPane.showInputDialog(null, message, message);
 		String [] m = message.split("-");
 		int [] msg = new int [m.length];
 		for (int i = 0; i < m.length; i++) msg[i] = Integer.parseInt(m[i]);

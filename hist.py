@@ -1,7 +1,7 @@
 import numpy as np
 from matplotlib import pylab as plt
 
-FNAME = "primes.txt"
+FNAME = "suitable_primes.txt"
 M = 10
 
 def normal(x, mean = 0, var = 1):
@@ -32,6 +32,6 @@ N = len(X)
 scaling = np.ones(N)/N/bin_size
 plt.hist(X, bins, weights = scaling)
 plt.xlabel("Bit error rate (%)");
-plt.ylabel("Normalized frequency");
+plt.ylabel("Relative frequency");
 plt.title("Distribution of bit error rate for a fixed prime")
 plt.show()

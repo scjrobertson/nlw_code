@@ -22,7 +22,7 @@ pm_path="$TREES/parse.xsl";
 dp_path="$TREES/dep.xsl";
 
 stanford_parse () {
-	java -Xmx6g -cp .:$core:$models:$xom:$joda:$jollyday:$ejml $class -annotators $options -file $1;
+	java -Xmx2g -cp .:$core:$models:$xom:$joda:$jollyday:$ejml $class -annotators $options -file $1;
 	mv $2.xml $3;
 	xmlstarlet tr $lm_path $3/$2.xml > $3/$4;
 	xmlstarlet tr $pm_path $3/$2.xml > $3/$5;
