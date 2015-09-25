@@ -3,7 +3,7 @@
 store_file=$1;
 test_type=$2;
 attack_type=$3;
-batch=$3;
+batch=$4;
 
 if [ $store_file = "--help" ]
 then

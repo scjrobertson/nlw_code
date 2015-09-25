@@ -17,6 +17,7 @@ import java.util.TreeSet;
 import java.util.HashSet;
 import java.util.Arrays;
 import java.util.Scanner;
+import javax.swing.JOptionPane;
 
 /**
  * Runs the embedding and extraction process.
@@ -182,6 +183,7 @@ public class RunMain {
 	 * @return An array of the message's binary representation.
 	 */
 	public static int [] specificMessage (String message) {
+		//JOptionPane.showMessageDialog(null, "Message: " + message);
 		String [] m = message.split("-");
 		int [] msg = new int [m.length];
 		for (int i = 0; i < m.length; i++) msg[i] = Integer.parseInt(m[i]);
@@ -244,6 +246,13 @@ public class RunMain {
 				if (args[6].equals("1")) msg = specificMessage(args[7]);
 				else msg = generateMessage(s);
 
+				/*
+				String ms = "";
+				for (int i = 0; i < msg.length; i++) ms = ms + msg[i] + "\t";
+				JOptionPane.showMessageDialog(null, "Generated Prime: " + p);
+				JOptionPane.showMessageDialog(null, "Generated Message: " + ms);
+				*/
+
 				if (args[5].equals("0")) embed(parse, dep, s, msg);
 				else supervisedEmbed(parse, dep, s, msg);
 				printOutput(parse, p, h, msg);
@@ -263,6 +272,18 @@ public class RunMain {
 
 				for (int i = 0; i < msg.length; i++) ber += msg[i] ^ rec[i];
 				System.out.println( (100.0*ber )/msg.length + ";" + p);  
+				/*
+				String ms = "";
+				String msd = "";
+				for (int i = 0; i < msg.length; i++) {
+					ms = ms + msg[i] + "\t";
+					msd = msd + rec[i] + "\t";
+				}
+				JOptionPane.showMessageDialog(null, "Received Prime: " + p);
+				JOptionPane.showMessageDialog(null, "Received Message: " + ms);
+				JOptionPane.showMessageDialog(null, "Decoded Message: " + msd);
+				JOptionPane.showMessageDialog(null, "BER: " + (100.0*ber)/msg.length);
+				*/
 			}
 		}
 	}

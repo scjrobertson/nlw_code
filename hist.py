@@ -1,8 +1,8 @@
 import numpy as np
 from matplotlib import pylab as plt
 
-FNAME = "suitable_primes.txt"
-M = 10
+FNAME = "a.txt"
+M = 5
 
 def normal(x, mean = 0, var = 1):
     return ( 1/np.sqrt(2*np.pi*var) )*np.exp(-((x - mean)**2)/(2*var))
@@ -23,7 +23,7 @@ var = np.var(X)
 print mean, var
 
 t = np.arange(0, 100)
-y = exponential(t, mean, var)
+y = normal(t, 0, var)
 
 plt.figure()
 bin_size = M
