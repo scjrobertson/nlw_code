@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.HashMap;
+import javax.swing.JOptionPane;
 
 /**
  * This is a library of static methods used to attack the aready embedded watermark.
@@ -190,7 +191,7 @@ public class Attack {
 		if (args.length >= 0)
 		{
 			text = plainText(args[0]);
-
+			
 			switch (args[3]) {
 				case "0":
 					attacked = randomDelete (text);

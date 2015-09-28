@@ -1,7 +1,7 @@
 import numpy as np
 from matplotlib import pylab as plt
 
-FNAME = "a.txt"
+FNAME = "suitable_primes.txt"
 M = 5
 
 def normal(x, mean = 0, var = 1):

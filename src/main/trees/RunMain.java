@@ -246,7 +246,7 @@ public class RunMain {
 				if (args[6].equals("1")) msg = specificMessage(args[7]);
 				else msg = generateMessage(s);
 
-				/*
+				/*				
 				String ms = "";
 				for (int i = 0; i < msg.length; i++) ms = ms + msg[i] + "\t";
 				JOptionPane.showMessageDialog(null, "Generated Prime: " + p);
@@ -272,6 +272,7 @@ public class RunMain {
 
 				for (int i = 0; i < msg.length; i++) ber += msg[i] ^ rec[i];
 				System.out.println( (100.0*ber )/msg.length + ";" + p);  
+				
 				/*
 				String ms = "";
 				String msd = "";
