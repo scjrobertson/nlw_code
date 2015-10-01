@@ -130,7 +130,7 @@ if [ $run = 1 ]
 				fi
 		elif [ $embed = 2 ]
 			then
-				if [ $attack = 1 ]
+				if [ $attack = 1 ] || [ $attack = 6 ]
 					then
 						delete_existing $OUTPATH/$root_out;
 						stanford_parse $file_out $root_out.txt $path_out $lemma_out $parse_out $dep_out $xml_out;

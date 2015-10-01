@@ -1,8 +1,9 @@
 import numpy as np
 from matplotlib import pylab as plt
 
-FNAME = "suitable_primes_tries.txt"
-M = 1
+FNAME = raw_input("Input file name: ")
+TITLE = raw_input("Input plot title: ")
+M = int( raw_input("Bin size: " ) )
 
 X = np.loadtxt(FNAME)
 mean = np.mean(X)
@@ -17,5 +18,5 @@ scaling = np.ones(N)/N/bin_size
 plt.hist(X, bins, weights = scaling)
 plt.xlabel("Tries");
 plt.ylabel("Relative frequency");
-plt.title("Distribution of tries")
+plt.title(TITLE)
 plt.show()

@@ -1,8 +1,9 @@
 import numpy as np
 from matplotlib import pylab as plt
 
-FNAME = "suitable_primes.txt"
-M = 5
+FNAME = raw_input("File name: ")
+TITLE = raw_input("Plot title: ")
+M = int( raw_input("Bin size: ") )
 
 def normal(x, mean = 0, var = 1):
     return ( 1/np.sqrt(2*np.pi*var) )*np.exp(-((x - mean)**2)/(2*var))
@@ -20,7 +21,7 @@ def exponential(x, mean = 1, var = 1):
 X = np.loadtxt(FNAME, delimiter=";", usecols = (0, 1))[:, 0]
 mean = np.mean(X)
 var = np.var(X)
-print mean, var
+print len(X), mean, var
 
 t = np.arange(0, 100)
 y = normal(t, 0, var)
@@ -33,5 +34,5 @@ scaling = np.ones(N)/N/bin_size
 plt.hist(X, bins, weights = scaling)
 plt.xlabel("Bit error rate (%)");
 plt.ylabel("Relative frequency");
-plt.title("Distribution of bit error rate for a fixed prime")
+plt.title(TITLE)
 plt.show()

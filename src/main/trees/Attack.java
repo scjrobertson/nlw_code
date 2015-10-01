@@ -26,9 +26,7 @@ import javax.swing.JOptionPane;
  */
 public class Attack {
 
-	private static final int PERC_DEL = 10;
-	private static final int PRECISION = 10;
-	private static final int SHUFFLE = 10;
+	private static final int PERC_DEL = 30;
 	private static final int PRIME_LENGTH = 64;
 	private static final int HASH_LENGTH = 8;
 	private static String HASH = "SHA-1";
@@ -89,10 +87,9 @@ public class Attack {
 		ArrayList<String> t = new ArrayList<String>();
 		
 		for (int i = 0; i < dep.length; i++) {
-			int r = (int) (Math.random()*PRECISION);
-			if ( !( TreeTransforms.isPassive(dep[i]) && ( r == 0 )  ) ) {
-				t.add(text[i]);		
-			} else System.out.println(text[i]);
+			int r = (int) (Math.random()*100);
+			if ( TreeTransforms.isPassive(dep[i]) && ( r < PERC_DEL ) ) ;
+			else t.add(text[i]);
 		}
 
 		return t.toArray( new String [t.size()] );
@@ -175,6 +172,45 @@ public class Attack {
 
 
 	/**
+	 * Simulates inserting a word into a sentence.
+	 *
+	 * @param text An array of plain text sentences, containing a watermark.
+	 * @return An Array of plain text sentences. The input array with inserted
+	 * entries.
+	 */
+	public static String[] insertWord(String [] text) {
+		HashSet<Integer> keys = new HashSet<Integer>();
+		NLG nlg = NLG.getInstance(FILES, 6);
+		int L = text.length;
+		int N = (int) ( L*(1.0*PERC_DEL/100) );
+
+		while (keys.size() < N) keys.add( (int) (Math.random()*(L-1) ) );
+		for (int i : keys) {
+			text[i] = nlg.generateSentence();
+		}
+
+		return text;
+	}
+
+
+	/**
+	 * Randomly modifies an untransformed sentence.
+	 *
+	 * @param parse An array of the plain text's corresponding syntactic parse trees.
+	 * @param dep An array of the plain text's corresponding dependency parse trees.
+	 * @return An Array of plain text sentences. The input array with modified entries.
+	 */
+	public static String[] modifying(DependencyTree[] d, ParseTree[] p) {
+		String [] text = new String[p.length];
+		for (int i = 0; i < p.length; i++) {
+			int r = (int) (Math.random()*100);
+			if (TreeTransforms.isSimple(d[i]) && r < PERC_DEL) TreeTransforms.passiveVoice(p[i].root);
+			text[i] = p[i].getSentence();
+		}
+		return text;
+	}
+	
+	/**
 	 * Coordinates the attacks.Input is from standard input, with the following format:
 	 * <p> Path to plain text, path to dependencies, path to lemma, attack type 
 	 *
@@ -186,6 +222,7 @@ public class Attack {
 		LargeInteger h = sha.hashString(p.toString());
 		String [] text;
 		String [] attacked = null;
+		ParseTree[] parse;
 		DependencyTree[] dep;
 
 		if (args.length >= 0)
@@ -208,6 +245,14 @@ public class Attack {
 					break;
 				case "4":
 					attacked = insertion(text);
+					break;
+				case "5":
+					attacked = insertWord(text);
+					break;
+				case "6":
+					dep = ReadFile.processDependency(args[1], args[2], p, h, sha );
+					parse = ReadFile.processParse("src/main/output/embed/embed_parse.txt", p, h, sha);
+					attacked = modifying(dep, parse);
 					break;
 				default:
 					break;

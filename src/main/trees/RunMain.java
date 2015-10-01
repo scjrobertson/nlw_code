@@ -246,11 +246,10 @@ public class RunMain {
 				if (args[6].equals("1")) msg = specificMessage(args[7]);
 				else msg = generateMessage(s);
 
-				/*				
+				/*
 				String ms = "";
 				for (int i = 0; i < msg.length; i++) ms = ms + msg[i] + "\t";
-				JOptionPane.showMessageDialog(null, "Generated Prime: " + p);
-				JOptionPane.showMessageDialog(null, "Generated Message: " + ms);
+				JOptionPane.showMessageDialog(null, "Generated Prime: " + p + "\nGenerated Message: " + ms);
 				*/
 
 				if (args[5].equals("0")) embed(parse, dep, s, msg);
@@ -280,10 +279,8 @@ public class RunMain {
 					ms = ms + msg[i] + "\t";
 					msd = msd + rec[i] + "\t";
 				}
-				JOptionPane.showMessageDialog(null, "Received Prime: " + p);
-				JOptionPane.showMessageDialog(null, "Received Message: " + ms);
-				JOptionPane.showMessageDialog(null, "Decoded Message: " + msd);
-				JOptionPane.showMessageDialog(null, "BER: " + (100.0*ber)/msg.length);
+				JOptionPane.showMessageDialog(null, "Received Prime: " + p + "\nIntended Message: " + ms
+						+ "\nDecoded Message: " + msd + "\nBER: " + (100*ber)/msg.length);
 				*/
 			}
 		}
