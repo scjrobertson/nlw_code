@@ -26,7 +26,7 @@ import javax.swing.JOptionPane;
  */
 public class Attack {
 
-	private static final int PERC_DEL = 30;
+	private static final int PERC_DEL = 40;
 	private static final int PRIME_LENGTH = 64;
 	private static final int HASH_LENGTH = 8;
 	private static String HASH = "SHA-1";
