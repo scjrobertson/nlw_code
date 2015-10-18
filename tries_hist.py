@@ -6,6 +6,7 @@ TITLE = raw_input("Input plot title: ")
 M = int( raw_input("Bin size: " ) )
 
 X = np.loadtxt(FNAME)
+X = X[ X>0 ]
 mean = np.mean(X)
 var = np.var(X)
 print mean, var

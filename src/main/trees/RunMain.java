@@ -169,7 +169,7 @@ public class RunMain {
 	 * @return An array of the message's binary representation.
 	 */
 	public static int [] generateMessage (SortedSet <Tree> s) {
-		int N = (int) ( s.size()*(1.0*MSG_LENGTH/100) );
+		int N = (int) ( s.size()*(0.1*MSG_LENGTH/100) );
 		int [] msg = new int [N];
 		for (int i = 0; i < N; i++) msg[i] = (int) ( Math.random()*2 );
 		return msg;
@@ -246,11 +246,12 @@ public class RunMain {
 				if (args[6].equals("1")) msg = specificMessage(args[7]);
 				else msg = generateMessage(s);
 
-				/*
 				String ms = "";
+				int k = 0;
+				for (int i = 0; i < dep.length; i++) if(TreeTransforms.isSimple(dep[i])) k++;
 				for (int i = 0; i < msg.length; i++) ms = ms + msg[i] + "\t";
+				JOptionPane.showMessageDialog(null, "#S: " + dep.length + "\n|S|: " + s.size() + "\n#A: " + k);
 				JOptionPane.showMessageDialog(null, "Generated Prime: " + p + "\nGenerated Message: " + ms);
-				*/
 
 				if (args[5].equals("0")) embed(parse, dep, s, msg);
 				else supervisedEmbed(parse, dep, s, msg);
@@ -272,7 +273,7 @@ public class RunMain {
 				for (int i = 0; i < msg.length; i++) ber += msg[i] ^ rec[i];
 				System.out.println( (100.0*ber )/msg.length + ";" + p);  
 				
-				/*
+				
 				String ms = "";
 				String msd = "";
 				for (int i = 0; i < msg.length; i++) {
@@ -281,7 +282,6 @@ public class RunMain {
 				}
 				JOptionPane.showMessageDialog(null, "Received Prime: " + p + "\nIntended Message: " + ms
 						+ "\nDecoded Message: " + msd + "\nBER: " + (100*ber)/msg.length);
-				*/
 			}
 		}
 	}

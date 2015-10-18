@@ -8,6 +8,7 @@ RESOURCES="src/main/resources";
 TREES="src/main/trees";
 SIMPLE="src/main/resources/simplenlg-v4.4.2.jar"
 OUTPATH="src/main/output";
+MEMORY="-Xmx6g";
 
 core="$RESOURCES/stanford-corenlp-3.5.2.jar";
 models="$RESOURCES/stanford-corenlp-3.5.2-models.jar";
@@ -22,7 +23,7 @@ pm_path="$TREES/parse.xsl";
 dp_path="$TREES/dep.xsl";
 
 stanford_parse () {
-	java -Xmx2g -cp .:$core:$models:$xom:$joda:$jollyday:$ejml $class -annotators $options -file $1;
+	java $MEMORY -cp .:$core:$models:$xom:$joda:$jollyday:$ejml $class -annotators $options -file $1;
 	mv $2.xml $3;
 	xmlstarlet tr $lm_path $3/$2.xml > $3/$4;
 	xmlstarlet tr $pm_path $3/$2.xml > $3/$5;
@@ -111,7 +112,7 @@ if [ $run = 1 ]
 			then 
 				delete_existing $OUTPATH/$root_in;
 				stanford_parse $file_in $root_in.txt $path_in $lemma_in $parse_in $dep_in $xml_in;
-				java -Xmx2g $COMPILE $path_in/$parse_in $path_in/$dep_in $path_in/$lemma_in $embed $path_out/$key $supervise $specific $message | tee $OUTPATH/$root_out.txt;
+				java $MEMORY $COMPILE $path_in/$parse_in $path_in/$dep_in $path_in/$lemma_in $embed $path_out/$key $supervise $specific $message | tee $OUTPATH/$root_out.txt;
 				if [ $supervise = 1 ]
 					then
 						delete_embed $OUTPATH $file_out;
@@ -123,7 +124,7 @@ if [ $run = 1 ]
 				delete_existing $OUTPATH/$root_out;
 				stanford_parse $file_out $root_out.txt $path_out $lemma_out $parse_out $dep_out $xml_out;
 				cp $OUTPATH/$key $OUTPATH/$root_out
-				java -Xmx2g $COMPILE $path_out/$parse_out $path_out/$dep_out $path_out/$lemma_out $embed $path_out/$key $supervise | tee -a $store_file;
+				java $MEMORY $COMPILE $path_out/$parse_out $path_out/$dep_out $path_out/$lemma_out $embed $path_out/$key $supervise | tee -a $store_file;
 				if [ $supervise = 1 ]
 					then
 						delete_extract $store_file;
@@ -136,7 +137,7 @@ if [ $run = 1 ]
 						stanford_parse $file_out $root_out.txt $path_out $lemma_out $parse_out $dep_out $xml_out;
 						cp $OUTPATH/$key $OUTPATH/$root_out;
 				fi
-				java -Xmx2g -cp .:$SIMPLE $COMPILE_ATTACK $OUTPATH/$root_out.txt $path_out/$dep_out $path_out/$lemma_out $attack | tee $OUTPATH/attacked.txt;
+				java $MEMORY -cp .:$SIMPLE $COMPILE_ATTACK $OUTPATH/$root_out.txt $path_out/$dep_out $path_out/$lemma_out $attack | tee $OUTPATH/attacked.txt;
 				mv $OUTPATH/attacked.txt $OUTPATH/$root_out.txt
 		fi
 fi

@@ -1,5 +1,6 @@
 import numpy as np
 from matplotlib import pylab as plt
+from scipy import stats as st
 
 FNAME = raw_input("File name: ")
 TITLE = raw_input("Plot title: ")
@@ -21,7 +22,8 @@ def exponential(x, mean = 1, var = 1):
 X = np.loadtxt(FNAME, delimiter=";", usecols = (0, 1))[:, 0]
 mean = np.mean(X)
 var = np.var(X)
-print len(X), mean, var
+skew = st.skew(X)
+print len(X), mean, np.sqrt(var), skew
 
 t = np.arange(0, 100)
 y = normal(t, 0, var)
@@ -32,7 +34,7 @@ bins = np.arange(0, 100, bin_size)
 N = len(X)
 scaling = np.ones(N)/N/bin_size
 plt.hist(X, bins, weights = scaling)
-plt.xlabel("Bit error rate (%)");
-plt.ylabel("Relative frequency");
+plt.xlabel("% BER")
+plt.ylabel("Relative frequency")
 plt.title(TITLE)
 plt.show()
