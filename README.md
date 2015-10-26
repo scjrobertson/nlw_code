@@ -2,7 +2,7 @@
 
 ## What is this repository for? ##
 
-* Code for the natural language watermarking approach described by Atallah et al. (2001).This project is implemented in Java and held together with bash scripts and some string.
+* Code for the natural language watermarking approach described by Atallah et al. (2001).This project is implemented in Java and tied together with bash scripts and some string.
 
 ## How do I get set up? ##
 
@@ -39,19 +39,19 @@ This generates a 1000 simple active sentences, a reasonable length for testing p
 
 ### runmain.sh ###
 runmain.sh controls the **embedding**, **attacking** and **extraction** procedures. The embedding algorithm embeds a random binary message within the plain text, at a pre-set length ( a percentage of the unique marker sentences ). The attacks include:
- * Random deletion 
- * Precise deletion 
- * Rearrangement 
- * Conjunction
- * Sentence insertion
- * Word insertion
+* Random deletion 
+* Precise deletion 
+* Rearrangement 
+* Conjunction
+* Sentence insertion
+* Word insertion
 
 The extraction algorithm extracts the embedded message and determines the bit error rate (**BER**). 
 
 runmain.sh parses the cover text using the **Stanford coreNLP**, it is run and complied as follows:
  
     chmod a+x generate.sh
-    ./runmain.sh [in_root] [out_root] [comp/run] [em/ex/att] [unsup/sup] [att_type] [results] [message]
+    ./runmain.sh [in_root] [out_root] [comp/run] [em/ex/att] [unsup/sup] [spec] [att_type] [results] [message]
 
 The flags are as follows:
 * **in_root**: The name of the output file produce by generate.sh, found in **nlw_code/src/main/output**. **nlw_code/src/main/output/inp_root** is contains the files for the input cover text.
@@ -66,6 +66,19 @@ The flags are as follows:
 * **unsup/sup**: Supervised or unsupervised embedding/extraction. Unsupervised embedding/extraction will make use of the automatic transformations/verfication. Supervised embedding will make use of manual transformations/verification.
     * **0**: Unsupervised
     * **1**: Supervised
+* **spec**: Embed a specific message within the text.
+    * **0**: Random message
+    * **1**: Specific message
+* **att_type**: The choice of attack, if attacking the watermark:
+    * **0**: Random deletion 
+    * **1**: Precise deletion 
+    * **2**: Rearrangement 
+    * **3**: Conjunction
+    * **4**: Sentence insertion
+    * **5**: Word insertion
+    * **6**: Modification
+* **results**: The chosen name of a .txt to hold the BER results. The file will be placed in **nlw_code/**.
+* **message**: Embed a specific message within the text. The binary message must be separated by dashes, e.g 0-1-0-1-0.
 
 
 
