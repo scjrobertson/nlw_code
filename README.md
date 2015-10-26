@@ -2,7 +2,7 @@
 
 ## What is this repository for? ##
 
-* Code for the natural language watermarking approach described by Atallah et al. (2001).This project is implemented in Java and tied together with bash scripts and some string.
+* Code for the natural language watermarking approach described by Atallah et al. (2001).This is a reference implementation used to set a becnhmark and determine the feasibility of the approach based on current NLP technologies. This project is implemented in Java and tied together with bash scripts and some string.
 
 ## How do I get set up? ##
 
