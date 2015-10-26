@@ -38,12 +38,25 @@ This generates a 1000 simple active sentences, a reasonable length for testing p
 * 1: Run the program.
 
 ### runmain.sh ###
-runmain.sh controls the **embedding**, **attacking** and **extraction** procedures. The embedding algorithm embeds a random binary message within the plain text, at a pre-set length ( a percentage of the unique marker sentences ). The attacks include random and precise **deletion**, **shuffling** and **conjunction**. The extraction algorithm extracts the embedded message and determines the bit error rate (**BER**). runmain.sh parses the cover text using the **Stanford coreNLP**, it is run and complied as follows:
+runmain.sh controls the **embedding**, **attacking** and **extraction** procedures. The embedding algorithm embeds a random binary message within the plain text, at a pre-set length ( a percentage of the unique marker sentences ). The attacks include:
+ * Random deletion 
+ * Precise deletion 
+ * Rearrangement 
+ * Conjunction
+ * Sentence insertion
+ * Word insertion
+
+The extraction algorithm extracts the embedded message and determines the bit error rate (**BER**). 
+
+runmain.sh parses the cover text using the **Stanford coreNLP**, it is run and complied as follows:
  
     chmod a+x generate.sh
-    ./runmain.sh [input_root] [output_root] [compile/run] [embed/extract] [attack_type]
+    ./runmain.sh [in_root] [out_root] [compile/run] [em/ex/att] [unsup/sup] [att_type] [results] [message]
 
-**input_root** is the output file produce by generate.sh, found in **nlw_code/src/main/output**. **output_root** creates two folders within **nlw_code/src/main/output**, both containing parse, dependency, lemma and key files. The key files contain the secret key specific to the embedding and the embedded message for the BER. **nlw_code/src/main/output/input_root** contains the files for the input cover text and **nlw_code/src/main/output/output_root** the files for the watermarked text.
+The flags are as follows:
+* **input_root** is the output file produce by generate.sh, found in **nlw_code/src/main/output**. **nlw_code/src/main/output/input_root** contains the files for the input cover text and
+* **output_root** creates two folders within **nlw_code/src/main/output**, both containing parse, dependency, lemma and key files. The key files contain the secret key specific to the embedding and the embedded message for the BER.  **nlw_code/src/main/output/output_root** the files for the watermarked text.
+
 
 
 ##API##
