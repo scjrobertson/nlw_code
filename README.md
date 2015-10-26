@@ -70,7 +70,27 @@ The flags are as follows:
 * **results**: The chosen name of a .txt to hold the BER results. The file will be placed in **nlw_code/**.
 * **message**: Embed a specific message within the text. The binary message must be separated by dashes, e.g 0-1-0-1-0.
 
+### tests.sh ###
+**tests.sh** coordinates the testing procedures. Executes **runmain.sh** under given conditions for a certain number of trials. It run in a similar way to **generates.sh**:
 
+    chmod a+x tests.sh
+    ./tests.sh [results] [test_type] [att_type] [batch]
+    
+The flags are as following:
+* **results**: The chosen name of a .txt to hold the BER results. The file will be placed in **nlw_code/**.
+* **test_type**: The test conditions:
+    * **0**: Ideal conditions. The watermark is embedded and extracted under ideal conditions.
+    * **1**: Tries. The watermark is embedded and extracted under ideal conditions. If the BER is over 20% the same message is embedded in the same text using a different prime.
+    * **2**: Attack conditions. The watermark is attack by one of the 7 attack types before extraction.
+* **att_type**: The choice of attack, if attacking the watermark:
+    * **0**: Random deletion 
+    * **1**: Precise deletion 
+    * **2**: Rearrangement 
+    * **3**: Conjunction
+    * **4**: Sentence insertion
+    * **5**: Word insertion
+    * **6**: Modification
+* **batch**: The number of tests to be run. On average a single test takes 44 seconds to complete.
 
 ##API##
 
