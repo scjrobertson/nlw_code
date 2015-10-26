@@ -41,7 +41,7 @@ runmain.sh controls the **embedding**, **attacking** and **extraction** procedur
 runmain.sh parses the cover text using the **Stanford coreNLP**, it is run and complied as follows:
  
     chmod a+x generate.sh
-    ./runmain.sh [in_root] [out_root] [comp/run] [em/ex/att] [unsup/sup] [spec] [att_type] [results] [message]
+    ./runmain.sh [in_root] [out_root] [comp/run] [em/ex/att] [unsup/sup] [spec] [att_type] [results] [msg]
 
 The flags are as follows:
 * **in_root**: The name of the output file produce by generate.sh, found in **nlw_code/src/main/output**. **nlw_code/src/main/output/inp_root** contains the  parse, dependency, lemma files for the input cover text.
@@ -80,7 +80,7 @@ The flags are as following:
 * **results**: The chosen name of a .txt to hold the BER results. The file will be placed in **nlw_code/**.
 * **test_type**: The test conditions:
     * **0**: Ideal conditions. The watermark is embedded and extracted under ideal conditions.
-    * **1**: Tries. The watermark is embedded and extracted under ideal conditions. If the BER is over 20% the same message is embedded in the same text using a different prime.
+    * **1**: Tries. The watermark is embedded and extracted under ideal conditions. If the BER is over 20% the same message is embedded in the same text using a different prime and the number of attempts recorded.
     * **2**: Attack conditions. The watermark is attack by one of the 7 attack types before extraction.
 * **att_type**: The choice of attack, if attacking the watermark:
     * **0**: Random deletion 
