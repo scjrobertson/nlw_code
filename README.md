@@ -38,15 +38,7 @@ This generates a 1000 simple active sentences, a reasonable length for testing p
 * 1: Run the program.
 
 ### runmain.sh ###
-runmain.sh controls the **embedding**, **attacking** and **extraction** procedures. The embedding algorithm embeds a random binary message within the plain text, at a pre-set length ( a percentage of the unique marker sentences ). The attacks include:
-* Random deletion 
-* Precise deletion 
-* Rearrangement 
-* Conjunction
-* Sentence insertion
-* Word insertion
-
-The extraction algorithm extracts the embedded message and determines the bit error rate (**BER**). 
+runmain.sh controls the **embedding**, **attacking** and **extraction** procedures. The embedding algorithm embeds a random binary message within the plain text, at a pre-set length ( a percentage of the unique marker sentences ). The extraction algorithm extracts the embedded message and determines the bit error rate (**BER**). 
 
 runmain.sh parses the cover text using the **Stanford coreNLP**, it is run and complied as follows:
  
