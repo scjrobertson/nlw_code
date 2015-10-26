@@ -2,7 +2,7 @@
 
 ## What is this repository for? ##
 
-* Java code for the natural language watermarking approach described by Atallah et al. (2001) .
+* Code for the natural language watermarking approach described by Atallah et al. (2001).This project is implemented in Java and held together with bash scripts and some string.
 
 ## How do I get set up? ##
 
@@ -22,9 +22,9 @@ To compile and run this, use the following commands:
         sudo apt-get install xmlstarlet
 
 ## Running current setup ##
+The current set up is run by three bash scripts **runmain.sh**, **generate.sh** and **test.sh** found in **nlw_code/**. 
 
 ### Parsing a plain text document ###
-The current set up is run by three bash scripts **runmain.sh**, **generate.sh** and **test.sh** found in **nlw_code/**. 
 
 #### generate.sh ###
 generate.sh creates simple cover text consisting solely of active sentences, it is complied and run as follows:
@@ -37,7 +37,7 @@ This generates a 1000 simple active sentences, a reasonable length for testing p
 * 0: Compile the program.
 * 1: Run the program.
 
-#### runmain.sh ####
+### runmain.sh ###
 runmain.sh controls the **embedding**, **attacking** and **extraction** procedures. The embedding algorithm embeds a random binary message within the plain text, at a pre-set length ( a percentage of the unique marker sentences ). The attacks include random and precise **deletion**, **shuffling** and **conjunction**. The extraction algorithm extracts the embedded message and determines the bit error rate (**BER**). runmain.sh parses the cover text using the **Stanford coreNLP**, it is run and complied as follows:
  
     chmod a+x generate.sh
