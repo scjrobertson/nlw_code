@@ -24,9 +24,7 @@ To compile and run this, use the following commands:
 ## Running current setup ##
 The current set up is run by three bash scripts **runmain.sh**, **generate.sh** and **test.sh** found in **nlw_code/**. 
 
-### Parsing a plain text document ###
-
-#### generate.sh ###
+### generate.sh ##
 generate.sh creates simple cover text consisting solely of active sentences, it is complied and run as follows:
 
      chmod a+x generate.sh
@@ -46,8 +44,8 @@ runmain.sh parses the cover text using the **Stanford coreNLP**, it is run and c
     ./runmain.sh [in_root] [out_root] [comp/run] [em/ex/att] [unsup/sup] [spec] [att_type] [results] [message]
 
 The flags are as follows:
-* **in_root**: The name of the output file produce by generate.sh, found in **nlw_code/src/main/output**. **nlw_code/src/main/output/inp_root** is contains the files for the input cover text.
-* **out_root**: The chosen name of the watermark output folders. Creates two folders within **nlw_code/src/main/output**, both containing parse, dependency, lemma and key files. The key files contain the secret key specific to the embedding and the embedded message for the BER.  **nlw_code/src/main/output/out_root** the output files for the watermarked text.
+* **in_root**: The name of the output file produce by generate.sh, found in **nlw_code/src/main/output**. **nlw_code/src/main/output/inp_root** contains the  parse, dependency, lemma files for the input cover text.
+* **out_root**: The chosen name of the watermark output folder. Creates folder within **nlw_code/src/main/output**, containing parse, dependency, lemma and key files.  **nlw_code/src/main/output/out_root** the output files for the watermarked text.
 * **compile/run** Whether to run the Java code or simply compile it:
     * **0**: Compile
     * **1**: Run
