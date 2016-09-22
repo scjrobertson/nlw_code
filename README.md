@@ -76,7 +76,7 @@ The flags are as follows:
     chmod a+x tests.sh
     ./tests.sh [results] [test_type] [att_type] [batch]
     
-The flags are as following:
+The flags are as follows:
 * **results**: The chosen name of a .txt to hold the BER results. The file will be placed in **nlw_code/**.
 * **test_type**: The test conditions:
     * **0**: Ideal conditions. The watermark is embedded and extracted under ideal conditions.
